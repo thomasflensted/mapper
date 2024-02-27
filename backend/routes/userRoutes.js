@@ -1,24 +1,38 @@
 const express = require('express');
 const router = express.Router();
+const {
+    getAllUsers,
+    getSingleUser,
+    updateNames,
+    updateEmail,
+    updatePassword,
+    deleteUser,
+    logInUser,
+    signUpUser
+} = require('../controllers/userControllers')
 
 // get all users - only for development purposes
-router.get('/', (req, res) => {
-    res.json({ mssg: "get all users" })
-})
+router.get('/', getAllUsers)
 
-// get user
-router.get('/:id', (req, res) => {
-    res.json({ mssg: "get user" })
-})
+// get single user - id in url params
+router.get('/:user_id/', getSingleUser);
 
-// patch user
-router.patch('/:id', (req, res) => {
-    res.json({ mssg: "patch user" })
-})
+// update user's names - new names in request body
+router.patch('/updateNames', updateNames);
 
-// delete user
-router.delete('/:id', (req, res) => {
-    res.json({ mssg: "delete user" })
-})
+// update user's email - new email in request body
+router.patch('/updateEmail', updateEmail);
+
+// update user's password - new password and repeated password in request body
+router.patch('/updatePassword', updatePassword);
+
+// delete user - user id in url params
+router.delete('/:user_id', deleteUser);
+
+// login user - user id in url params
+router.post('/login', logInUser);
+
+// sign up user - all user credentials in request body
+router.post('/signup', signUpUser);
 
 module.exports = router; 
