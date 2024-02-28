@@ -1,6 +1,11 @@
-const User = require('../models/UserModel')
-const Map = require('../models/MapModel')
-const Place = require('../models/PlaceModel')
+const User = require('../models/UserModel');
+const Map = require('../models/MapModel');
+const Place = require('../models/PlaceModel');
+const jwt = require('jsonwebtoken');
+
+const createToken = (_id) => {
+    return jwt.sign({ _id }, process.env.SECRET, { expiresIn: '3d' })
+}
 
 // list all user - only for development purposes
 const getAllUsers = async (req, res) => {
@@ -80,7 +85,8 @@ const logInUser = async (req, res) => {
     const { email, password } = req.body;
     try {
         const user = await User.login(email, password);
-        res.status(200).json(user);
+        const token = createToken(user._id);
+        res.status(200).json({ email, token });
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
@@ -91,7 +97,8 @@ const signUpUser = async (req, res) => {
     const { first_name, last_name, email, profile_picture, password, passwordRepeat } = req.body;
     try {
         const newUser = await User.signup(first_name, last_name, profile_picture, email, password, passwordRepeat);
-        res.status(200).json(newUser);
+        const token = createToken(newUser._id);
+        res.status(200).json({ email, token });
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
