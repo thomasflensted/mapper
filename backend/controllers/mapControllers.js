@@ -1,4 +1,5 @@
 const Map = require('../models/MapModel')
+const User = require('../models/UserModel')
 
 // get all maps - only for development purposes 
 const getAllMaps = async (req, res) => {
@@ -15,7 +16,7 @@ const getSingleMap = async (req, res) => {
     const map_id = req.params.map_id;
     try {
         const map = await Map.findOne({ _id: map_id });
-        res.status(200).json(map ? map : { mssg: "Invalid map id" });
+        res.status(200).json(map);
     } catch (err) {
         res.status(400).json({ mssg: err.message });
     }
@@ -25,6 +26,8 @@ const getSingleMap = async (req, res) => {
 const getUsersMaps = async (req, res) => {
     const user_id = req.params.user_id;
     try {
+        const user = await User.findOne({ _id: user_id });
+        if (!user) throw Error("User does not exist");
         const userMaps = await Map.find({ user_id });
         res.status(200).json(userMaps);
     } catch (err) {

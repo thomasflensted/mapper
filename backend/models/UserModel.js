@@ -6,6 +6,7 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema({
     first_name: { type: String, required: true },
     last_name: { type: String },
+    profile_picture: { type: String },
     email: { type: String, required: true },
     password: { type: String, required: true }
 })
@@ -29,7 +30,7 @@ UserSchema.statics.login = async function (email, password) {
     return user;
 }
 
-UserSchema.statics.signup = async function (first_name, last_name, email, password, passwordRepeat) {
+UserSchema.statics.signup = async function (first_name, last_name, profile_picture, email, password, passwordRepeat) {
 
     if (!email || !password || !first_name || !passwordRepeat) {
         throw Error("All fields with an asterisk must be filled out.");
@@ -58,7 +59,7 @@ UserSchema.statics.signup = async function (first_name, last_name, email, passwo
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
 
-    const user = this.create({ first_name: capitalizedFirstName, last_name: capitalizedLastName, email, password: passwordHash })
+    const user = this.create({ first_name: capitalizedFirstName, last_name: capitalizedLastName, profile_picture, email, password: passwordHash })
     return user;
 }
 
