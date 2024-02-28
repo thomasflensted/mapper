@@ -1,7 +1,7 @@
-const bcrypt = require('bcrypt');
-const validator = require('validator');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const bcrypt = require('bcrypt');
+const validator = require('validator');
 
 const UserSchema = new Schema({
     first_name: { type: String, required: true },
@@ -65,6 +65,8 @@ UserSchema.statics.signup = async function (first_name, last_name, profile_pictu
 
 UserSchema.statics.updateEmail = async function (oldEmail, newEmail, password) {
 
+    if (!newEmail) throw Error("Email field must be filled out.");
+
     const user = await this.findOne({ email: oldEmail });
     if (!user) {
         throw Error("Couldn't find user. Please refresh the page or log out and in again.")
@@ -91,6 +93,8 @@ UserSchema.statics.updateEmail = async function (oldEmail, newEmail, password) {
 
 UserSchema.statics.updateNames = async function (email, first_name, last_name) {
 
+    if (!first_name) throw Error("First name must be filled out.");
+
     const user = await this.findOne({ email });
     if (!user) {
         throw Error("Couldn't find user. Please refresh the page or log out and in again.")
@@ -98,6 +102,11 @@ UserSchema.statics.updateNames = async function (email, first_name, last_name) {
 
     const capitalizedFirstName = capitalizeFirstLetter(first_name);
     const capitalizedLastName = capitalizeFirstLetter(last_name);
+
+    if (user.first_name === capitalizedFirstName && user.last_name == capitalizedLastName) {
+        throw Error("No changes to update.")
+    }
+
     const updatedUser = await this.findOneAndUpdate(
         { email },
         { first_name: capitalizedFirstName, last_name: capitalizedLastName },
@@ -107,7 +116,10 @@ UserSchema.statics.updateNames = async function (email, first_name, last_name) {
     return response;
 }
 
-UserSchema.statics.updatePassword = async function (email, newPassword, oldPasswordTyped) {
+UserSchema.statics.updatePassword = async function (email, newPassword, oldPasswordTyped, newPasswordRepeat) {
+
+    if (!newPassword || !newPasswordRepeat) throw Error("Both password fields must be filled out.");
+    if (newPassword !== newPasswordRepeat) throw Error("New passwords are not matching.");
 
     const user = await this.findOne({ email });
     if (!user) {
@@ -131,7 +143,7 @@ UserSchema.statics.updatePassword = async function (email, newPassword, oldPassw
 }
 
 const capitalizeFirstLetter = (text) => {
-    return text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase()
+    return text.substring(0, 1).toUpperCase() + text.substring(1);
 }
 
 module.exports = mongoose.model("User", UserSchema);

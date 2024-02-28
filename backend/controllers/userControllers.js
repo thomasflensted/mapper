@@ -1,5 +1,8 @@
 const User = require('../models/UserModel')
+const Map = require('../models/MapModel')
+const Place = require('../models/PlaceModel')
 
+// list all user - only for development purposes
 const getAllUsers = async (req, res) => {
     try {
         const allUsers = await User.find({});
@@ -8,6 +11,8 @@ const getAllUsers = async (req, res) => {
         res.status(400).json({ error: err.message });
     }
 }
+
+// get a single user by its id
 const getSingleUser = async (req, res) => {
     const _id = req.params.user_id;
     try {
@@ -17,10 +22,11 @@ const getSingleUser = async (req, res) => {
         res.status(400).json({ error: err.message });
     }
 }
+
+// update user's name or names
 const updateNames = async (req, res) => {
     const { email, first_name, last_name } = req.body;
     try {
-        if (!first_name) throw Error("First name must be filled out.");
         const response = await User.updateNames(email, first_name, last_name)
         res.status(200).json(response);
     } catch (err) {
@@ -28,10 +34,10 @@ const updateNames = async (req, res) => {
     }
 }
 
+// update users email - uses function on user model
 const updateEmail = async (req, res) => {
     const { oldEmail, newEmail, password } = req.body;
     try {
-        if (!newEmail) throw Error("Email field must be filled out.");
         const response = await User.updateEmail(oldEmail, newEmail, password)
         res.status(200).json(response);
     } catch (err) {
@@ -39,28 +45,37 @@ const updateEmail = async (req, res) => {
     }
 }
 
+// update users email - uses function on user model
 const updatePassword = async (req, res) => {
     const { email, oldPasswordTyped, newPassword, newPasswordRepeat } = req.body;
     try {
-        if (!newPassword || !newPasswordRepeat) throw Error("Both password fields must be filled out.");
-        if (newPassword !== newPasswordRepeat) throw Error("New passwords are not matching.");
-        const response = await User.updatePassword(email, newPassword, oldPasswordTyped);
+        const response = await User.updatePassword(email, newPassword, oldPasswordTyped, newPasswordRepeat);
         res.status(200).json(response);
     } catch (err) {
         res.status(400).json({ error: err.message })
     }
 }
 
+// delete user and all associated maps and places
 const deleteUser = async (req, res) => {
     const _id = req.params.user_id;
     try {
         const deletedUser = await User.findOneAndDelete({ _id });
-        if (!deletedUser) throw Error("Something went wrong. Please refresh the page or log out and in again.")
-        res.status(200).json({ mssg: "Successfully deleted 1 user", deletedUser });
+        const userMaps = await Map.find({ user_id: _id });
+        const userMapIds = userMaps.map(map => map._id);
+        const placeResponse = await Place.deleteMany({ map_id: { $in: userMapIds } })
+        await Map.deleteMany({ user_id: deletedUser._id });
+        res.status(200).json({
+            deletedUser: deletedUser._id,
+            deletedMaps: userMaps.length,
+            deletedPlaces: placeResponse.deletedCount
+        });
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
 }
+
+// log in - uses function on user model
 const logInUser = async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -70,6 +85,8 @@ const logInUser = async (req, res) => {
         res.status(400).json({ error: err.message });
     }
 }
+
+// sign up - uses function on user model
 const signUpUser = async (req, res) => {
     const { first_name, last_name, email, profile_picture, password, passwordRepeat } = req.body;
     try {

@@ -1,4 +1,5 @@
 const Place = require('../models/PlaceModel')
+const Map = require('../models/MapModel')
 
 // get all places - only for development purposes
 const getAllPlaces = async (req, res) => {
@@ -34,8 +35,8 @@ const getAllPlacesThatBelongToMap = async (req, res) => {
 // create single place
 const createSinglePlace = async (req, res) => {
     try {
-        const response = await Place.create({ ...req.body })
-        res.status(200).json(response);
+        const createdPlace = await Place.createPlace({ ...req.body });
+        res.status(200).json(createdPlace);
     } catch (err) {
         res.status(400).json({ mssg: err.message });
     }
