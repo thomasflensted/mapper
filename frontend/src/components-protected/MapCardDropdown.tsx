@@ -1,6 +1,6 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
-import DeleteWarning from './DeleteWarning';
+import DeleteWarning from '../components-misc/DeleteWarning';
 
 const MapCardDropdown = () => {
     return (

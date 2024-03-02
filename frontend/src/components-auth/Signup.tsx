@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
-import { ErrorMssg } from "./ErrorAndSuccess"
+import { ErrorMssg } from "../components-misc/ErrorAndSuccess"
 
 const Signup = () => {
 
@@ -21,8 +21,9 @@ const Signup = () => {
 
     const detectErrors = (): string => {
         if (!firstName) return "First name field must be filled out";
-        if (!email) return "Email field must be filled out"
-        if (password !== passwordRepeat) return "Passwords Are Not Matching"
+        if (!email) return "Email field must be filled out";
+        if (!password || !passwordRepeat) return 'Password fields must be filled out';
+        if (password !== passwordRepeat) return "Passwords are not matching"
         return '';
     }
 
