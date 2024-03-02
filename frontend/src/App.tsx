@@ -6,8 +6,9 @@ import NavBar from "./components/NavBar"
 import Footer from "./components/Footer"
 import Signup from "./components/Signup"
 import Login from "./components/Login"
-import Home from "./components/Home"
+import Home from "./components/unprotected/Home"
 import Account from "./components/Account"
+import UserHome from './components/protected/UserHome'
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/signup' element={<Signup />} />
             <Route path='/account' element={<Account />} />
+            <Route path='/userhome' element={<UserHome />} />
           </Routes>
         </main>
       </BrowserRouter>
