@@ -1,13 +1,19 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { ErrorMssg } from "../components-misc/ErrorAndSuccess";
 
 const CreateNewMap = () => {
 
     const [desc, setDesc] = useState('');
     const [name, setName] = useState('');
+    const [error, setError] = useState('');
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (!name) {
+            setError("Name field must be filled out");
+            return;
+        }
     }
 
     const twClasses: string = `flex px-12 flex-col border text-sm text-gray-500
@@ -28,12 +34,13 @@ const CreateNewMap = () => {
                     <input maxLength={50} onChange={(e) => setDesc(e.target.value)} className="w-full border p-2 rounded shadow-sm mt-1" type="text" />
                     <span className="absolute top-[35px] right-[10px] text-gray-300 text-xs">{`${desc.length}/50`}</span>
                 </div>
-                <div className="mt-6 flex gap-2">
+                <div className="my-6 flex gap-2">
                     <Link to={'/userhome'} className="w-full">
                         <button className="border w-full rounded py-2 px-4 shadow-sm hover:bg-gray-50">Cancel</button>
                     </Link>
                     <button form="newmapform" className="border w-full rounded py-2 px-4 shadow-sm text-white bg-blue-500 hover:bg-blue-600">Create Map</button>
                 </div>
+                {error && <ErrorMssg mssg={error} />}
             </form >
         </div >
     )
