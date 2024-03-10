@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ErrorMssg } from "../components-misc/ErrorAndSuccess";
 
 const CreateNewMap = () => {
 
-    const [desc, setDesc] = useState('');
-    const [name, setName] = useState('');
+    const location = useLocation();
+    const { nameProp, descProp } = location.state;
+    const [desc, setDesc] = useState(descProp);
+    const [name, setName] = useState(nameProp);
     const [error, setError] = useState('');
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -21,24 +23,24 @@ const CreateNewMap = () => {
 
     return (
         <div className={twClasses}>
-            <h2 className="text-blue-600 text-md font-bold mb-3">Create New Map</h2>
+            <h2 className="mb-3 font-bold text-blue-600 text-md">Create New Map</h2>
             <form id="newmapform" onSubmit={(e) => handleSubmit(e)}>
                 <div className="relative">
                     <label className="text-sm" htmlFor="">Map Name</label>
-                    <input maxLength={30} onChange={(e) => setName(e.target.value)} className="w-full border p-2 rounded shadow-sm mt-1" type="text" />
+                    <input value={name} maxLength={30} onChange={(e) => setName(e.target.value)} className="w-full p-2 mt-1 text-xs border rounded shadow-sm" type="text" />
                     <span className="absolute top-[35px] right-[10px] text-gray-300 text-xs">{`${name.length}/30`}</span>
                 </div>
-                <div className="mt-4 relative">
+                <div className="relative mt-4">
                     <label className="" htmlFor="">Map Description</label>
-                    <span className="text-gray-300 italic"> - optional</span>
-                    <input maxLength={50} onChange={(e) => setDesc(e.target.value)} className="w-full border p-2 rounded shadow-sm mt-1" type="text" />
+                    <span className="italic text-gray-300"> - optional</span>
+                    <input value={desc} maxLength={50} onChange={(e) => setDesc(e.target.value)} className="w-full p-2 mt-1 text-xs border rounded shadow-sm" type="text" />
                     <span className="absolute top-[35px] right-[10px] text-gray-300 text-xs">{`${desc.length}/50`}</span>
                 </div>
-                <div className="my-6 flex gap-2">
+                <div className="flex gap-2 my-6">
                     <Link to={'/userhome'} className="w-full">
-                        <button className="border w-full rounded py-2 px-4 shadow-sm hover:bg-gray-50">Cancel</button>
+                        <button className="w-full px-4 py-2 border rounded shadow-sm hover:bg-gray-50">Cancel</button>
                     </Link>
-                    <button form="newmapform" className="border w-full rounded py-2 px-4 shadow-sm text-white bg-blue-500 hover:bg-blue-600">Create Map</button>
+                    <button form="newmapform" className="w-full px-4 py-2 text-white bg-blue-500 border rounded shadow-sm hover:bg-blue-600">Create Map</button>
                 </div>
                 {error && <ErrorMssg mssg={error} />}
             </form >

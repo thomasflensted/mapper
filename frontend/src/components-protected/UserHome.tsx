@@ -1,30 +1,39 @@
-import MapCard from "./Mapcard"
+import MapCard, { VariantModel } from "./Mapcard"
 import { Link } from "react-router-dom";
 import mapexample from '../assets/mapexample.png'
+import { motion } from "framer-motion"
 
 const UserHome = () => {
 
+    const container = { before: {}, after: { transition: { duration: .2, staggerChildren: .05 } } }
+    const variants: VariantModel = {
+        before: { opacity: 0, y: 50, scale: .75 },
+        after: { opacity: 1, y: 0, scale: 1 }
+    }
+
     const cards = [];
-    for (let i = 0; i < 5; i++) {
-        cards.push(<MapCard />);
+    for (let i = 0; i < 7; i++) {
+        cards.push(<MapCard variants={variants} />);
     }
 
     return (
-        <div className="flex flex-col items-center mt-10 gap-4 w-full">
-            <h2 className="text-blue-700 text-4xl font-bold">Welcome Thomas</h2>
+        <motion.div variants={container} animate='after' initial='before' className="flex flex-col items-center w-full gap-4 my-10">
+            <h2 className="text-4xl font-bold text-blue-700">Welcome Thomas</h2>
             <p className="text-blue-500 font-md">Explore Your Maps</p>
-            <div className="grid grid-cols-3 gap-6 mt-4">
+            <div className="grid grid-cols-4 gap-6 mt-4">
                 {cards}
-                <Link to='/create'>
-                    <div className="h-56 w-56 rounded-xl border shadow-md flex flex-col p-2">
-                        <img className='rounded-lg mb-2' src={mapexample} alt="" />
-                        <button className="flex text-sm h-full w-full justify-center items-center font-bold text-blue-600 py-2 px-4 rounded-lg border hover:bg-gray-50">Create New Map</button>
-                        {/*<h2 className="font-bold text-lg text-blue-600">Create New Map</h2>*/}
-                    </div>
+                <Link to='/create' state={{ nameProp: '', descProp: '' }}>
+                    <motion.div
+                        variants={variants}
+                        className="flex flex-col w-56 h-56 p-2 border shadow-md rounded-xl">
+                        <img className='mb-2 rounded-lg' src={mapexample} alt="" />
+                        <button className="flex items-center justify-center w-full h-full px-4 py-2 text-sm font-bold text-blue-600 border rounded-lg hover:bg-gray-50">
+                            {cards.length === 0 ? "Create Your First Map" : "Create New Map"}
+                        </button>
+                    </motion.div>
                 </Link>
-
             </div>
-        </div>
+        </motion.div >
     )
 }
 

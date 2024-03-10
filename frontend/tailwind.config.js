@@ -14,11 +14,16 @@ export default {
         scaleUp: {
           '0%': { transform: 'scale(0.25)' },
           '100%': { transform: 'scale(1)' },
+        },
+        fadeIn: {
+          '0%': { opacity: 0 },
+          '100%': { opacity: 1 },
         }
       },
       animation: {
         'page-slide-up': 'pageSlideUp .5s ease',
-        'scaleup': 'scaleUp .5s ease',
+        'scale-up': 'scaleUp .5s ease',
+        'fade-in': 'fadeIn .25s'
       },
     },
   },

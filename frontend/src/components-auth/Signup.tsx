@@ -1,12 +1,14 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import { ErrorMssg } from "../components-misc/ErrorAndSuccess"
+import VisibilityIcon from "../components-misc/VisibilityIcon"
 
 const Signup = () => {
 
     const [error, setError] = useState('')
     const [password, setPassword] = useState('');
     const [passwordRepeat, setPasswordRepeat] = useState('');
+    const [passwordIsVisible, setPasswordIsVisible] = useState(false);
     const [email, setEmail] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -35,26 +37,26 @@ const Signup = () => {
         { text: "Repeat Password", type: "password", optional: false },
     ]
 
-    const twClasses: string = `flex flex-col border text-sm text-gray-500
-    gap-4 w-1/4 p-8 rounded-lg h-min shadow-[0_0_60px_0px_rgba(0,0,0,0.05)] animate-page-slide-up`
-
     return (
-        <form className={twClasses} onSubmit={(e) => handleSubmit(e)} id="userform">
-            <h2 className="font-bold text-lg text-blue-600">Sign Up</h2>
-            {forms.map((form, idx) =>
-                <div key={form.text}>
-                    <label htmlFor="">{form.text}</label>
-                    {form.optional && <span className="text-gray-300 italic"> - optional</span>}
-                    <input
-                        onChange={(e) => setterFuncs[idx](e.target.value)}
-                        className="w-full border rounded px-2 py-1 focus:outline-1"
-                        type={form.type} />
-                </div>
-            )}
-            <button type="submit" form='userform' className="border py-1.5 rounded bg-blue-500 text-white font-bold hover:bg-blue-600">Create Account</button>
+        <div className="flex flex-col w-1/4 p-8 border rounded-lg h-min shadow-[0_0_60px_0px_rgba(0,0,0,0.05)] animate-page-slide-up">
+            <form className="flex flex-col gap-4 mb-4" onSubmit={(e) => handleSubmit(e)} id="userform">
+                <h2 className="text-lg font-bold text-blue-600">Sign Up</h2>
+                {forms.map((form, idx) =>
+                    <div key={form.text} className="relative">
+                        <label className='mr-1 text-xs text-gray-600'>{form.text}</label>
+                        {form.optional && <span className="text-xs italic text-gray-300"> - optional</span>}
+                        <input
+                            onChange={(e) => setterFuncs[idx](e.target.value)}
+                            className="text-input"
+                            type={form.type === "password" && !passwordIsVisible ? "password" : "text"} />
+                        {form.type === "password" && <VisibilityIcon visible={passwordIsVisible} change={setPasswordIsVisible} />}
+                    </div>
+                )}
+                <button type="submit" form='userform' className="btn-blue">Create Account</button>
+            </form>
             {error && <ErrorMssg mssg={error} />}
             <Link to='/login' className="text-xs underline ">Already have An Account? Log In Here.</Link>
-        </form>
+        </div>
     )
 }
 

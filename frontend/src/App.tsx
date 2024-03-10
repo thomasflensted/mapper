@@ -2,11 +2,11 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 // components
-import NavBar from "./components-unprotected/NavBar"
-import Footer from "./components-unprotected/Footer"
+import NavBar from "./components-general/NavBar"
+import Footer from "./components-general/Footer"
 import Signup from "./components-auth/Signup"
 import Login from "./components-auth/Login"
-import Home from "./components-unprotected/Home"
+import Home from "./components-front-page/Home"
 import Account from "./components-account/Account"
 import UserHome from './components-protected/UserHome'
 import CreateNewMap from './components-protected/CreateNewMap'
@@ -17,7 +17,7 @@ function App() {
     <div className="flex flex-col h-screen">
       <BrowserRouter>
         <NavBar />
-        <main className="flex grow justify-center">
+        <main className="flex justify-center grow">
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/login' element={<Login />} />

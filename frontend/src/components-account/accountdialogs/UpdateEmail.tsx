@@ -1,39 +1,38 @@
 import * as Dialog from '@radix-ui/react-dialog';
-import { EyeOpenIcon, EyeNoneIcon } from '@radix-ui/react-icons'
-import { useState } from 'react';
+import VisibilityIcon from '../../components-misc/VisibilityIcon';
+import { FormEvent, useState } from 'react';
 
-const UpdateEmail = () => {
-
-    const forms = [
-        { text: "Email", type: "email" },
-        { text: "Password", type: "password" },
-    ]
+const UpdateEmail = ({ setOpen }: { setOpen: Function }) => {
 
     const [passwordIsVisible, setPasswordIsVisible] = useState(false);
-    const eyeIcon = passwordIsVisible
-        ? <EyeOpenIcon
-            onClick={() => setPasswordIsVisible(!passwordIsVisible)}
-            className='absolute top-[58%] right-3 text-gray-600 hover:cursor-pointer' />
-        : <EyeNoneIcon
-            onClick={() => setPasswordIsVisible(!passwordIsVisible)}
-            className='absolute top-[58%] right-3 text-gray-600 hover:cursor-pointer' />
+
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setOpen(false);
+    }
 
     return (
         <Dialog.Portal>
-            <Dialog.Overlay className='fixed opacity-50 inset-0 bg-black' />
-            <Dialog.Content className='flex flex-col w-1/3 gap-4 fixed top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-6 border rounded'>
-                <Dialog.Title className='text-gray-600 font-bold'>Update Email</Dialog.Title>
-                {forms.map(form =>
-                    <div key={form.text} className='relative'>
-                        <label className='text-sm mr-1 text-gray-600'>{form.text}</label>
-                        <input className="w-full border rounded px-2 py-1 focus:outline-1" type={passwordIsVisible ? 'text' : 'password'} />
-                        {form.type === 'password' && eyeIcon}
+            <Dialog.Overlay className='fixed inset-0 bg-black opacity-60' />
+            <Dialog.Content
+                className='fixed flex flex-col w-1/4 gap-4 p-6 -translate-x-1/2 -translate-y-1/2 bg-white border rounded animate-fade-in top-1/3 left-1/2'>
+                <Dialog.Title className='font-bold text-blue-600'>Update Email</Dialog.Title>
+                <form id='emailform' onSubmit={(e) => handleSubmit(e)}>
+                    <div className='mb-4'>
+                        <label className='mr-1 text-xs text-gray-600'>Email</label>
+                        <input className="text-input" type='text' />
                     </div>
-                )}
+                    <div className='relative mb-4'>
+                        <label className='mr-1 text-xs text-gray-600'>Password</label>
+                        <input className="text-input" type={passwordIsVisible ? 'text' : 'password'} />
+                        <VisibilityIcon visible={passwordIsVisible} change={setPasswordIsVisible} />
+                    </div>
+                </form>
                 <div className='flex gap-2'>
-                    <Dialog.Close className='border rounded w-full py-2 hover:bg-gray-50'>Cancel</Dialog.Close>
-                    <Dialog.Close className='border rounded w-full py-2 text-white bg-blue-500 hover:bg-blue-600'>Update</Dialog.Close>
+                    <Dialog.Close className='w-full py-2 border rounded hover:bg-gray-50'>Cancel</Dialog.Close>
+                    <button form='emailform' className='w-full py-2 text-white bg-blue-500 border rounded hover:bg-blue-600'>Update</button>
                 </div>
+
             </Dialog.Content>
         </Dialog.Portal>
     )
