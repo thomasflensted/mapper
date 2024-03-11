@@ -7,9 +7,8 @@ const FiltersExpander = ({ setFilter }: { setFilter: React.Dispatch<React.SetSta
 
     const [isExpanded, setIsExpanded] = useState(false);
     const animation = {
-        initial: { width: 40, height: 40 },
         open: { width: 763, height: 40, transition: { duration: 0.6, ease: [.77, 0, .18, 1] } },
-        closed: { width: 40, height: 40 }
+        closed: { width: 40, height: 40, transition: { duration: 0.6, ease: [.77, 0, .18, 1] } }
     }
 
     const [filterElements, setFilterElements] = useState<Filters>([
@@ -41,7 +40,7 @@ const FiltersExpander = ({ setFilter }: { setFilter: React.Dispatch<React.SetSta
     }
 
     return (
-        <motion.div variants={animation} animate={isExpanded ? "open" : "closed"}
+        <motion.div variants={animation} animate={isExpanded ? "open" : "closed"} initial={false}
             onMouseEnter={() => setIsExpanded(true)}
             onMouseLeave={() => setIsExpanded(false)}
             className="absolute border z-10 flex items-center gap-5 p-[12px] overflow-hidden bg-white rounded-full shadow-lg top-2 left-2 justfify-left">

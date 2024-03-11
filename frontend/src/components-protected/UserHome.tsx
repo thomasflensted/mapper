@@ -1,4 +1,4 @@
-import MapCard, { VariantModel } from "./Mapcard"
+import MapCard, { Variants } from "./Mapcard"
 import { Link } from "react-router-dom";
 import mapexample from '../assets/mapexample.png'
 import { motion } from "framer-motion"
@@ -6,7 +6,7 @@ import { motion } from "framer-motion"
 const UserHome = () => {
 
     const container = { before: {}, after: { transition: { duration: .2, staggerChildren: .05 } } }
-    const variants: VariantModel = {
+    const variants: Variants = {
         before: { opacity: 0, y: 50, scale: .75 },
         after: { opacity: 1, y: 0, scale: 1 }
     }

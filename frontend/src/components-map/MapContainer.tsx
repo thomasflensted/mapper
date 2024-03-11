@@ -3,6 +3,7 @@ import FiltersExpander from './FiltersExpander';
 import MapComponent from './MapComponent';
 import { places } from '../exampleData';
 import { PlaceType, Places } from '../types';
+import MapList from './MapList';
 
 const MapContainer = () => {
 
@@ -11,6 +12,7 @@ const MapContainer = () => {
 
     return (
         <div className="w-[90%] h-[700px] rounded-xl overflow-hidden shadow-lg border border-lg relative">
+            <MapList places={filteredPlaces} />
             <FiltersExpander setFilter={setFilter} />
             <MapComponent places={filteredPlaces} />
         </div>

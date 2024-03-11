@@ -9,9 +9,9 @@ type PopUpProps = {
     setShowPopUp: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-const PopUpWithInfo = ({ lat, lng, data, setShowPopUp }: PopUpProps) => {
+export const capitalizeFirstLetter = (txt: string) => { return txt.substring(0, 1).toUpperCase() + txt.substring(1, txt.length) }
 
-    const capitalizeType = (txt: string) => { return txt.substring(0, 1).toUpperCase() + txt.substring(1, txt.length) }
+const PopUpWithInfo = ({ lat, lng, data, setShowPopUp }: PopUpProps) => {
 
     return (
         <Popup
@@ -30,7 +30,7 @@ const PopUpWithInfo = ({ lat, lng, data, setShowPopUp }: PopUpProps) => {
                             <IoMdClose />
                         </div>
                     </div>
-                    <p className="text-gray-400 text-[11px]">{capitalizeType(data.type)}</p>
+                    <p className="text-gray-400 text-[11px]">{capitalizeFirstLetter(data.type)}</p>
                 </div>
                 <hr className="border-[0.5px] border-blue-200" />
                 <p className="font-normal text-justify text-gray-700">{data.desc}</p>

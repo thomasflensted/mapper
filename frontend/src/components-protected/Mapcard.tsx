@@ -4,18 +4,16 @@ import mapexample from '../assets/mapexample.png'
 import MapCardDropdown from './MapCardDropdown';
 import { motion } from "framer-motion"
 
-export type VariantModel = {
+export type Variants = {
     before: { opacity: number, y: number, scale: number },
     after: { opacity: number, y: number, scale: number }
 };
 
-export interface VariantProps { variants?: VariantModel };
-
-const MapCard = (props: VariantProps) => {
+const MapCard = ({ variants }: { variants: Variants }) => {
 
     return (
         <motion.div
-            variants={props.variants}
+            variants={variants}
             className="relative flex flex-col w-56 h-56 p-2 border shadow-md cursor-pointer rounded-xl">
             <DropdownMenu.Root>
                 <DropdownMenu.Trigger asChild>

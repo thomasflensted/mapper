@@ -1,16 +1,12 @@
 const Footer = () => {
 
-    //const year: number = new Date().getFullYear();
+    const year: number = new Date().getFullYear();
 
     return (
-        <></>
+        <footer className="py-4 text-center grow-0" >
+            <p className="text-sm font-bold text-blue-600">Mapper {year} &trade;</p >
+        </footer>
     )
 }
 
 export default Footer
-
-/*
-<footer className="grow-0 text-center py-4 bg-blue-600" >
-<p className="text-white text-sm">Mapper {year}</p >
-</footer>
-*/

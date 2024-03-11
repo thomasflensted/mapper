@@ -1,4 +1,4 @@
-import { Places } from "./types"
+import { Places, Map } from "./types"
 export const places: Places = [
     {
         name: 'Via Carota',
@@ -96,4 +96,15 @@ export const places: Places = [
         coordinates: [-58.45583, -34.55460],
         map_id: '12',
     },
+]
+
+export const maps: Map[] = [
+    { name: "Best CPH Restaurants", description: 'Best culinary experiences I had in Copenhagen.', user_id: '1' },
+    { name: "Amazing Nature", description: "Seen in real life or online.", user_id: '2' },
+    { name: "Cofee Shops", description: 'Cute coffee shops I stumbled upon.', user_id: '3' },
+    { name: "Memories", description: 'Never forget these.', user_id: '4' },
+    { name: "My Favorite Museums", description: 'Inspiring art and history.', user_id: '5' },
+    { name: "Sights That Are Worth It", description: 'Statue Of Liberty, go home.', user_id: '6' },
+    { name: "Cute Hotels I Found", description: 'From quaint to extravagant.', user_id: '7' },
+    { name: "Best Burgers", description: "Traditional and veggie.", user_id: '8' },
 ]
