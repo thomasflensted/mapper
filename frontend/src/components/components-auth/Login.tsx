@@ -2,6 +2,7 @@ import { Link } from "react-router-dom"
 import { ErrorMssg } from "../components-misc/ErrorAndSuccess"
 import { useState } from "react"
 import VisibilityIcon from "../components-misc/VisibilityIcon"
+import { useLogin } from "../../hooks/useLogin"
 
 const Login = () => {
 
@@ -9,14 +10,16 @@ const Login = () => {
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [passwordIsVisible, setPasswordIsVisible] = useState(false);
+    const { loginError, login } = useLogin();
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!email || !password) {
             setError("Both fields must be filled out.")
             return;
         }
-        console.log(email, password)
+        await login(email, password);
     }
 
 
@@ -36,6 +39,7 @@ const Login = () => {
                 <button form="login" className="btn-blue">Log In</button>
             </form>
             {error && <ErrorMssg mssg={error} />}
+            {loginError && <ErrorMssg mssg={loginError} />}
             <Link to='/signup' className="text-xs underline ">New User? Sign Up Here.</Link>
         </div>
     )

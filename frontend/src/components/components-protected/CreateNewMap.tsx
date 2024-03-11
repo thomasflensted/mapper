@@ -28,16 +28,16 @@ const CreateNewMap = () => {
                 <div className="relative">
                     <label className="text-sm" htmlFor="">Map Name</label>
                     <input value={name} maxLength={30} onChange={(e) => setName(e.target.value)} className="w-full p-2 mt-1 text-xs border rounded shadow-sm" type="text" />
-                    <span className="absolute top-[35px] right-[10px] text-gray-300 text-xs">{`${name.length}/30`}</span>
+                    <span className="absolute top-[34px] right-[10px] text-gray-300 text-xs">{`${name.length}/30`}</span>
                 </div>
                 <div className="relative mt-4">
                     <label className="" htmlFor="">Map Description</label>
                     <span className="italic text-gray-300"> - optional</span>
                     <input value={desc} maxLength={50} onChange={(e) => setDesc(e.target.value)} className="w-full p-2 mt-1 text-xs border rounded shadow-sm" type="text" />
-                    <span className="absolute top-[35px] right-[10px] text-gray-300 text-xs">{`${desc.length}/50`}</span>
+                    <span className="absolute top-[34px] right-[10px] text-gray-300 text-xs">{`${desc.length}/50`}</span>
                 </div>
                 <div className="flex gap-2 my-6">
-                    <Link to={'/userhome'} className="w-full">
+                    <Link to='/' className="w-full">
                         <button className="w-full px-4 py-2 border rounded shadow-sm hover:bg-gray-50">Cancel</button>
                     </Link>
                     <button form="newmapform" className="w-full px-4 py-2 text-white bg-blue-500 border rounded shadow-sm hover:bg-blue-600">Create Map</button>

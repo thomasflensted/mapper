@@ -1,7 +1,7 @@
 import { DoubleArrowRightIcon } from '@radix-ui/react-icons'
 import { motion } from "framer-motion"
 import { useState } from 'react';
-import { Filters, PlaceType } from '../types';
+import { Filters, PlaceType } from '../../types';
 
 const FiltersExpander = ({ setFilter }: { setFilter: React.Dispatch<React.SetStateAction<PlaceType[]>> }) => {
 

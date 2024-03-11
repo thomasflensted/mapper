@@ -1,6 +1,6 @@
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import mapexample from '../assets/mapexample.png'
+import mapexample from '/Users/thomasflensted/Documents/03 PROJECTS/mapper/frontend/src/assets/mapexample.png'
 import { Link } from 'react-router-dom';
 
 const MapCardMock = ({ title, desc }: { title: string, desc: string }) => {

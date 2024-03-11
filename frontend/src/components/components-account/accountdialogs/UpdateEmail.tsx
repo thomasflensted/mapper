@@ -1,10 +1,13 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import VisibilityIcon from '../../components-misc/VisibilityIcon';
 import { FormEvent, useState } from 'react';
+import { useAuthContext } from '../../../hooks/useAuthContext';
 
 const UpdateEmail = ({ setOpen }: { setOpen: Function }) => {
 
     const [passwordIsVisible, setPasswordIsVisible] = useState(false);
+    const { user } = useAuthContext();
+    const [email, setEmail] = useState(user?.email);
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -20,7 +23,7 @@ const UpdateEmail = ({ setOpen }: { setOpen: Function }) => {
                 <form id='emailform' onSubmit={(e) => handleSubmit(e)}>
                     <div className='mb-4'>
                         <label className='mr-1 text-xs text-gray-600'>Email</label>
-                        <input className="text-input" type='text' />
+                        <input className="text-input" type='text' value={email} onChange={(e) => setEmail(e.target.value)} />
                     </div>
                     <div className='relative mb-4'>
                         <label className='mr-1 text-xs text-gray-600'>Password</label>

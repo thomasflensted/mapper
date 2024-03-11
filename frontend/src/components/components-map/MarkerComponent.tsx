@@ -1,5 +1,5 @@
 import { Marker } from 'react-map-gl';
-import { Place } from '../types';
+import { Place } from '../../types';
 import { FaHamburger, FaCoffee, FaTree, FaBuilding, FaStar, FaLightbulb } from "react-icons/fa";
 import { GiGreekTemple } from "react-icons/gi";
 import { ReactNode } from 'react';

@@ -1,6 +1,6 @@
 import Map from 'react-map-gl';
 import { useState } from "react";
-import { Places } from "../types";
+import { Places } from "../../types";
 import mapboxgl from 'mapbox-gl';
 import MarkerComponent from "./MarkerComponent";
 import PopUpWithSignUpButton from "./PopUpWithSignUpButton";
@@ -10,7 +10,12 @@ const TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 type View = { longitude: number, latitude: number, zoom: number };
 export type PlaceData = { name: string, desc: string, type: string }
 
-const MapComponent = ({ places }: { places: Places }) => {
+type MapComponentProps = {
+    places: Places,
+    setPlace: React.Dispatch<React.SetStateAction<string>>,
+}
+
+const MapComponent = ({ places, setPlace }: MapComponentProps) => {
 
     const [showMapPopup, setShowMapPopup] = useState(false);
     const [showMarkerPopup, setShowMarkerPopup] = useState(false);
@@ -18,6 +23,7 @@ const MapComponent = ({ places }: { places: Places }) => {
     const [markerPosition, setMarkerPosition] = useState<{ lng: number, lat: number }>({ lng: 0, lat: 0 })
 
     const handleMapClick = (e: mapboxgl.MapLayerMouseEvent) => {
+        setPlace('')
         setMarkerPosition(e.lngLat)
         setShowMarkerPopup(false)
         setShowMapPopup(true);
@@ -25,10 +31,15 @@ const MapComponent = ({ places }: { places: Places }) => {
 
     const handleMarkerClick = (e: any, coords: number[], name: string, desc: string, type: string) => {
         e.originalEvent.stopImmediatePropagation();
-        setShowMapPopup(false);
-        setMarkerPosition({ lng: coords[0], lat: coords[1] });
-        setPlaceData({ name, desc, type });
-        setShowMarkerPopup(true)
+        if (name === placeData.name) {
+            setShowMarkerPopup(false);
+        } else {
+            setPlace(name);
+            setShowMapPopup(false);
+            setMarkerPosition({ lng: coords[0], lat: coords[1] });
+            setPlaceData({ name, desc, type });
+            setShowMarkerPopup(true)
+        }
     }
 
     const initialView: View = { longitude: 15, latitude: 20, zoom: 1.5 }

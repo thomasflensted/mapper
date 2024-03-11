@@ -1,10 +1,12 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import { FormEvent, useState } from 'react';
+import { useAuthContext } from '../../../hooks/useAuthContext';
 
 const UpdateName = ({ setOpen }: { setOpen: Function }) => {
 
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastname] = useState('')
+    const { user } = useAuthContext();
+    const [firstName, setFirstName] = useState(user?.first_name);
+    const [lastName, setLastname] = useState(user?.last_name)
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();

@@ -35,3 +35,11 @@ export type Filter = {
 }
 
 export type Filters = Filter[]
+
+export type UserType = {
+    first_name: string,
+    last_name: string,
+    email: string,
+    profile_picture: string,
+    token: string,
+}

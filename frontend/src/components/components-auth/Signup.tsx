@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 import { ErrorMssg } from "../components-misc/ErrorAndSuccess"
 import VisibilityIcon from "../components-misc/VisibilityIcon"
+import { useSignup } from "../../hooks/useSignup"
 
 const Signup = () => {
 
@@ -10,19 +11,22 @@ const Signup = () => {
     const [passwordRepeat, setPasswordRepeat] = useState('');
     const [passwordIsVisible, setPasswordIsVisible] = useState(false);
     const [email, setEmail] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+    const [first_name, setFirstName] = useState('');
+    const [last_name, setLastName] = useState('');
     const setterFuncs = [setFirstName, setLastName, setEmail, setPassword, setPasswordRepeat];
+    const { signup, signUpError } = useSignup();
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
-        console.log(firstName, lastName, email, password, passwordRepeat);
         setError(detectErrors());
-        if (error) return;
+        const signUpCreds = { first_name, last_name, email, profile_picture: '', password }
+        if (!error) {
+            await signup(signUpCreds)
+        };
     }
 
     const detectErrors = (): string => {
-        if (!firstName) return "First name field must be filled out";
+        if (!first_name) return "First name field must be filled out";
         if (!email) return "Email field must be filled out";
         if (!password || !passwordRepeat) return 'Password fields must be filled out';
         if (password !== passwordRepeat) return "Passwords are not matching"
@@ -55,6 +59,7 @@ const Signup = () => {
                 <button type="submit" form='userform' className="btn-blue">Create Account</button>
             </form>
             {error && <ErrorMssg mssg={error} />}
+            {signUpError && <ErrorMssg mssg={signUpError} />}
             <Link to='/login' className="text-xs underline ">Already have An Account? Log In Here.</Link>
         </div>
     )
