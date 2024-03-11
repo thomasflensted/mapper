@@ -30,11 +30,7 @@ UserSchema.statics.login = async function (email, password) {
     return user;
 }
 
-UserSchema.statics.signup = async function (first_name, last_name, profile_picture, email, password, passwordRepeat) {
-
-    if (!email || !password || !first_name || !passwordRepeat) {
-        throw Error("All fields with an asterisk must be filled out.");
-    }
+UserSchema.statics.signup = async function (first_name, last_name, profile_picture, email, password) {
 
     const exists = await this.findOne({ email });
     if (exists) {
@@ -43,10 +39,6 @@ UserSchema.statics.signup = async function (first_name, last_name, profile_pictu
 
     if (!validator.isEmail(email)) {
         throw Error("Invalid email address.");
-    }
-
-    if (password !== passwordRepeat) {
-        throw Error("Passwords are not matching.");
     }
 
     if (!validator.isStrongPassword(password)) {

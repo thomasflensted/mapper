@@ -86,7 +86,13 @@ const logInUser = async (req, res) => {
     try {
         const user = await User.login(email, password);
         const token = createToken(user._id);
-        res.status(200).json({ email, token });
+        res.status(200).json({
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email: user.email,
+            profile_picture: user.profile_picture,
+            token
+        });
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
@@ -94,11 +100,17 @@ const logInUser = async (req, res) => {
 
 // sign up - uses function on user model
 const signUpUser = async (req, res) => {
-    const { first_name, last_name, email, profile_picture, password, passwordRepeat } = req.body;
+    const { first_name, last_name, email, profile_picture, password } = req.body;
     try {
-        const newUser = await User.signup(first_name, last_name, profile_picture, email, password, passwordRepeat);
+        const newUser = await User.signup(first_name, last_name, profile_picture, email, password);
         const token = createToken(newUser._id);
-        res.status(200).json({ email, token });
+        res.status(200).json({
+            first_name: newUser.first_name,
+            last_name: newUser.last_name,
+            email: newUser.email,
+            profile_picture: newUser.profile_picture,
+            token
+        });
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
