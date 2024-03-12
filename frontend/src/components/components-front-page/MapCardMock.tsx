@@ -2,12 +2,16 @@ import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import mapexample from '/Users/thomasflensted/Documents/03 PROJECTS/mapper/frontend/src/assets/mapexample.png'
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 const MapCardMock = ({ title, desc }: { title: string, desc: string }) => {
 
     return (
-        <div
-            className="relative flex flex-col w-56 h-56 p-2 transition border shadow-md cursor-pointer rounded-xl hover:scale-[1.025] ease">
+        <motion.div
+            initial={{ opacity: 0, scale: .5 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: .15, type: 'tween' }}
+            className="relative flex flex-col w-56 h-56 p-2 transition border shadow-md cursor-pointer rounded-xl hover:scale-[1.025] ease" >
             <DropdownMenu.Root>
                 <DropdownMenu.Trigger asChild>
                     <HamburgerMenuIcon className='absolute text-white top-4 right-4' />
@@ -26,7 +30,7 @@ const MapCardMock = ({ title, desc }: { title: string, desc: string }) => {
                 <h1 className='my-1 text-sm font-bold text-blue-600 whitespace-nowrap'>{title}</h1>
                 <p className='px-4 text-xs text-blue-500'>{desc}</p>
             </div>
-        </div>
+        </motion.div >
     )
 }
 

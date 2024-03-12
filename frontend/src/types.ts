@@ -43,3 +43,5 @@ export type UserType = {
     profile_picture: string,
     token: string,
 }
+
+export type View = 'list' | 'marker';

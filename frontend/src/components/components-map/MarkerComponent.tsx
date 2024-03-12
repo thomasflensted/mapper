@@ -8,10 +8,11 @@ type PlaceIcon = { element: ReactNode, border: string }
 type PlaceIcons = { [key: string]: PlaceIcon }
 type MarkerProps = {
     place: Place,
-    handleClick: (e: any, coords: number[], name: string, desc: string, type: string) => void
+    handleClick: (e: any, place: Place) => void,
+    size: string
 }
 
-const MarkerComponent = ({ place, handleClick }: MarkerProps) => {
+const MarkerComponent = ({ place, handleClick, size }: MarkerProps) => {
 
     const placeIcons: PlaceIcons = {
         restaurant: { element: <FaHamburger className='w-3 h-3 text-orange-400' />, border: 'border-orange-400' },
@@ -25,12 +26,12 @@ const MarkerComponent = ({ place, handleClick }: MarkerProps) => {
 
     return (
         <Marker
-            onClick={(e) => handleClick(e, place.coordinates, place.name, place.description, place.type)}
+            onClick={(e) => handleClick(e, place)}
             key={place.coordinates[0]}
             longitude={place.coordinates[0]}
             latitude={place.coordinates[1]}>
             <div className={`flex items-center justify-center w-6 h-6 bg-white border
-                rounded-full shadow-md hover:cursor-pointer ${placeIcons[place.type].border}`}>
+                rounded-full shadow-md hover:cursor-pointer ${placeIcons[place.type].border} ${size}`}>
                 {placeIcons[place.type].element}
             </div>
         </Marker>

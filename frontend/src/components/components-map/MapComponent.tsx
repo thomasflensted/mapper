@@ -1,51 +1,56 @@
-import Map from 'react-map-gl';
-import { useState } from "react";
-import { Places } from "../../types";
+import { Map } from 'react-map-gl';
+import { ReactNode, useState, useRef, useEffect } from "react";
+import { Places, View, Place } from "../../types";
 import mapboxgl from 'mapbox-gl';
 import MarkerComponent from "./MarkerComponent";
 import PopUpWithSignUpButton from "./PopUpWithSignUpButton";
 import PopUpWithInfo from "./PopUpWithInfo";
 const TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
-type View = { longitude: number, latitude: number, zoom: number };
-export type PlaceData = { name: string, desc: string, type: string }
+type MapView = { longitude: number, latitude: number, zoom: number };
 
 type MapComponentProps = {
+    children: ReactNode,
     places: Places,
-    setPlace: React.Dispatch<React.SetStateAction<string>>,
+    setCurrentPlace: React.Dispatch<React.SetStateAction<Place | null>>,
+    currentPlace: Place | null,
+    view: View,
 }
 
-const MapComponent = ({ places, setPlace }: MapComponentProps) => {
+const MapComponent = ({ children, places, setCurrentPlace, currentPlace, view }: MapComponentProps) => {
 
+    const mapRef = useRef<any>(null);
     const [showMapPopup, setShowMapPopup] = useState(false);
     const [showMarkerPopup, setShowMarkerPopup] = useState(false);
-    const [placeData, setPlaceData] = useState<PlaceData>({ name: '', desc: '', type: '' });
-    const [markerPosition, setMarkerPosition] = useState<{ lng: number, lat: number }>({ lng: 0, lat: 0 })
+    const [clickCoordinates, setClickCoordinates] = useState<{ lng: number, lat: number }>({ lng: 0, lat: 0 })
+    const [currentPlaceIsVisible, setCurrentPlaceIsVisible] = useState<boolean>(true);
+
+    useEffect(() => {
+        if (currentPlace) setCurrentPlaceIsVisible(places.includes(currentPlace));
+        if (view === 'list' && currentPlace) mapRef.current.flyTo({
+            center: [currentPlace.coordinates[0], currentPlace.coordinates[1]]
+        })
+    }, [currentPlace, places])
 
     const handleMapClick = (e: mapboxgl.MapLayerMouseEvent) => {
-        setPlace('')
-        setMarkerPosition(e.lngLat)
+        setCurrentPlace(null)
+        setClickCoordinates(e.lngLat)
         setShowMarkerPopup(false)
         setShowMapPopup(true);
     }
 
-    const handleMarkerClick = (e: any, coords: number[], name: string, desc: string, type: string) => {
+    const handleMarkerClick = (e: any, place: Place) => {
         e.originalEvent.stopImmediatePropagation();
-        if (name === placeData.name) {
-            setShowMarkerPopup(false);
-        } else {
-            setPlace(name);
-            setShowMapPopup(false);
-            setMarkerPosition({ lng: coords[0], lat: coords[1] });
-            setPlaceData({ name, desc, type });
-            setShowMarkerPopup(true)
-        }
+        setCurrentPlace(place);
+        setShowMapPopup(false);
+        setShowMarkerPopup(true)
     }
 
-    const initialView: View = { longitude: 15, latitude: 20, zoom: 1.5 }
+    const initialView: MapView = { longitude: 15, latitude: 20, zoom: 1.5 }
 
     return (
         <Map
+            ref={mapRef}
             onZoom={() => setShowMapPopup(false)}
             onClick={(e) => handleMapClick(e)}
             mapboxAccessToken={TOKEN}
@@ -55,18 +60,18 @@ const MapComponent = ({ places, setPlace }: MapComponentProps) => {
                 <MarkerComponent
                     key={place.coordinates[0]}
                     place={place}
-                    handleClick={handleMarkerClick} />)}
+                    handleClick={handleMarkerClick}
+                    size={(currentPlace?.name === place.name && view === 'list') ? 'scale-125' : 'scale-100'} />)}
             {showMapPopup && (
                 <PopUpWithSignUpButton
-                    lat={markerPosition.lat}
-                    lng={markerPosition.lng}
+                    lat={clickCoordinates.lat}
+                    lng={clickCoordinates.lng}
                     setShowPopUp={setShowMapPopup} />)}
-            {showMarkerPopup && (
+            {showMarkerPopup && view == 'marker' && currentPlaceIsVisible && (
                 <PopUpWithInfo
-                    lat={markerPosition.lat}
-                    lng={markerPosition.lng}
-                    data={placeData}
+                    place={currentPlace}
                     setShowPopUp={setShowMarkerPopup} />)}
+            {children}
         </Map >
     )
 }

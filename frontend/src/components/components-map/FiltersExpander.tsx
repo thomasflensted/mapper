@@ -1,9 +1,13 @@
 import { DoubleArrowRightIcon } from '@radix-ui/react-icons'
 import { motion } from "framer-motion"
 import { useState } from 'react';
-import { Filters, PlaceType } from '../../types';
+import { Filters, Place, PlaceType } from '../../types';
 
-const FiltersExpander = ({ setFilter }: { setFilter: React.Dispatch<React.SetStateAction<PlaceType[]>> }) => {
+type ExpanderProps = {
+    setFilter: React.Dispatch<React.SetStateAction<PlaceType[]>>
+}
+
+const FiltersExpander = ({ setFilter }: ExpanderProps) => {
 
     const [isExpanded, setIsExpanded] = useState(false);
     const animation = {

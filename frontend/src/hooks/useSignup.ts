@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export const useSignup = () => {
 
@@ -19,7 +20,7 @@ export const useSignup = () => {
         setIsLoading(true);
         setSignUpError('');
 
-        const response = await fetch('http://localhost:4000/api/user/signup', {
+        const response = await fetch(`${BASE_URL}/user/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
