@@ -8,6 +8,9 @@ const {
     updateSingleMap,
     deleteSingleMap,
 } = require('../controllers/mapControllers');
+const requireAuth = require('../middleware/requireAuth');
+
+router.use(requireAuth);
 
 // get all maps - only for development purposes
 router.get('/', getAllMaps)

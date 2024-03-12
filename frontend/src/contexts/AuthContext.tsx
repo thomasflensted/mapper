@@ -1,9 +1,9 @@
 import { ReactNode, createContext, useReducer, useEffect } from "react";
-import { UserType } from "../types";
+import { User } from "../types";
 
-export type User = UserType | null | undefined;
+export type UserType = User;
 export type StateType = { user: User };
-export type ActionType = { type: string, payload?: User }
+export type ActionType = { type: string, payload: User }
 export type UserContextType = { user: User, authDispatch: React.Dispatch<ActionType> }
 
 export const AuthContext = createContext<UserContextType>({ user: null, authDispatch: () => { } });
@@ -29,7 +29,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
         if (user) authDispatch({ type: "LOGIN", payload: JSON.parse(user) });
     }, [])
 
-    console.log("Auth state:", state.user);
+    console.log(state.user ? `User with name ${state.user.first_name} is logged in.` : "Auth state: Logged out.");
 
     return (
         <AuthContext.Provider value={{ ...state, authDispatch }}>

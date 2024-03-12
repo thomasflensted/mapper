@@ -4,10 +4,11 @@ import { Link } from 'react-router-dom';
 import UpdateName from './accountdialogs/UpdateName';
 import UpdateEmail from './accountdialogs/UpdateEmail';
 import UpdatePassword from './accountdialogs/UpdatePassword';
-import * as Dialog from '@radix-ui/react-dialog';
 import { useState } from 'react';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { useLogout } from '../../hooks/useLogout';
+import AccountRow from './AccountRow';
+import { SuccessMssg } from '../components-misc/ErrorAndSuccess';
 
 
 const Account = () => {
@@ -15,6 +16,7 @@ const Account = () => {
     const [nameIsOpen, setNameIsOpen] = useState(false);
     const [emailIsOpen, setEmailIsOpen] = useState(false);
     const [passwordIsOpen, setPasswordIsOpen] = useState(false);
+    const [success, setSuccess] = useState('');
     const { user } = useAuthContext();
     const { logout } = useLogout();
 
@@ -26,44 +28,23 @@ const Account = () => {
         <div className="flex px-12 flex-col border text-sm text-gray-500 gap-8 w-1/3 p-8 rounded-lg h-min shadow-[0_0_60px_0px_rgba(0,0,0,0.05)] animate-page-slide-up">
 
             <div className="relative m-auto overflow animate-scale-up">
-                <img className='w-[90px] h-[90px] rounded-full shadow-lg' src={thomas} alt="Rounded avatar" />
+                <img className='w-[90px] h-[90px] rounded-full shadow-lg' src={thomas} />
                 <div className='absolute bottom-[10px] right-[-4px] rounded-full shadow-md p-1 bg-white hover:scale-125 transition ease'>
                     <Pencil1Icon className='text-black' />
                 </div>
             </div>
 
-            <div className="flex justify-between">
-                <div>
-                    <h3 className="text-sm text-black">Name</h3>
-                    <p className="text-sm text-gray-400">{`${user?.first_name} ${user?.last_name}`}</p>
-                </div>
-                <Dialog.Root open={nameIsOpen} onOpenChange={setNameIsOpen}>
-                    <Dialog.Trigger className="px-6 py-2 transition border rounded hover:bg-slate-50 hover:scale-105 ease">Edit</Dialog.Trigger>
-                    <UpdateName setOpen={setNameIsOpen} />
-                </Dialog.Root>
-            </div>
+            <AccountRow text={`${user?.first_name} ${user?.last_name}`} heading='Name' openState={nameIsOpen} openController={setNameIsOpen}>
+                <UpdateName setOpen={setNameIsOpen} setSuccess={setSuccess} />
+            </AccountRow>
 
-            <div className="flex justify-between">
-                <div>
-                    <h3 className="text-sm text-black">Email</h3>
-                    <p className="text-sm text-gray-400">{user?.email}</p>
-                </div>
-                <Dialog.Root open={emailIsOpen} onOpenChange={setEmailIsOpen}>
-                    <Dialog.Trigger className="px-6 py-2 transition border rounded hover:bg-slate-50 hover:scale-105 ease">Edit</Dialog.Trigger>
-                    <UpdateEmail setOpen={setEmailIsOpen} />
-                </Dialog.Root>
-            </div>
+            <AccountRow text={user ? user.email : ''} heading='Email' openState={emailIsOpen} openController={setEmailIsOpen}>
+                <UpdateEmail setOpen={setEmailIsOpen} setSuccess={setSuccess} />
+            </AccountRow>
 
-            <div className="flex justify-between">
-                <div>
-                    <h3 className="text-sm text-black">Password</h3>
-                    <p className="text-sm text-gray-400">••••••••••••</p>
-                </div>
-                <Dialog.Root open={passwordIsOpen} onOpenChange={setPasswordIsOpen}>
-                    <Dialog.Trigger className="px-6 py-2 transition border rounded hover:bg-slate-50 hover:scale-105 ease">Edit</Dialog.Trigger>
-                    <UpdatePassword setOpen={setPasswordIsOpen} />
-                </Dialog.Root>
-            </div>
+            <AccountRow text='••••••••••••' heading='Password' openState={passwordIsOpen} openController={setPasswordIsOpen}>
+                <UpdatePassword setOpen={setPasswordIsOpen} setSuccess={setSuccess} />
+            </AccountRow>
 
             <div className='flex flex-col w-full gap-2'>
                 <div className='flex gap-2'>
@@ -73,9 +54,8 @@ const Account = () => {
                     <button className='w-full btn-red'>Delete Account</button>
                 </div>
                 <button onClick={handleLogout} className='w-full btn-red'>Log Out</button>
+                {success && <SuccessMssg mssg={success} />}
             </div>
-
-
         </div>
     )
 }

@@ -1,19 +1,40 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import { FormEvent, useState } from 'react';
 import VisibilityIcon from '../../components-misc/VisibilityIcon';
+import { useAuthContext } from '../../../hooks/useAuthContext';
+import useUpdateUser from '../../../hooks/useUpdateUser';
+import { ErrorMssg } from '../../components-misc/ErrorAndSuccess';
 
-const UpdatePassword = ({ setOpen }: { setOpen: Function }) => {
+type ComponentProps = {
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>,
+    setSuccess: React.Dispatch<React.SetStateAction<string>>,
+}
 
+const UpdatePassword = ({ setOpen, setSuccess }: ComponentProps) => {
+
+    // context and hooks
+    const { user, authDispatch } = useAuthContext();
+    const { updatePassword, updateError } = useUpdateUser();
+
+    // state
     const [newIsVisible, setNewIsVisible] = useState(false);
     const [passwordIsVisible, setPasswordIsVisible] = useState(false);
+    const [oldPassword, setOldPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [newPasswordRepeat, setNewPasswordRepeat] = useState('');
 
     const resetVisibility = () => {
         setPasswordIsVisible(false);
         setNewIsVisible(false);
     }
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const updatedUser = await updatePassword(user, oldPassword, newPassword, newPasswordRepeat);
+        if (!updatedUser) return;
+        authDispatch({ type: 'LOGIN', payload: updatedUser });
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        setSuccess("Account password was successfully updated");
         setOpen(false);
         resetVisibility();
     }
@@ -26,24 +47,25 @@ const UpdatePassword = ({ setOpen }: { setOpen: Function }) => {
                 <form id='pwform' onSubmit={(e) => handleSubmit(e)}>
                     <div className='relative mb-4'>
                         <label className='mr-1 text-xs text-gray-600'>New Password</label>
-                        <input className="text-input" type={passwordIsVisible ? 'text' : 'password'} />
-                        <VisibilityIcon visible={passwordIsVisible} change={setPasswordIsVisible} />
+                        <input className="text-input" type={newIsVisible ? 'text' : 'password'} onChange={(e) => setNewPassword(e.target.value)} />
+                        <VisibilityIcon visible={newIsVisible} change={setNewIsVisible} />
                     </div>
                     <div className='relative mb-4'>
                         <label className='mr-1 text-xs text-gray-600'>Repeat New Password</label>
-                        <input className="text-input" type={newIsVisible ? 'text' : 'password'} />
+                        <input className="text-input" type={newIsVisible ? 'text' : 'password'} onChange={(e) => setNewPasswordRepeat(e.target.value)} />
                         <VisibilityIcon visible={newIsVisible} change={setNewIsVisible} />
                     </div>
                     <div className='relative mb-4'>
                         <label className='mr-1 text-xs text-gray-600'>Old Password</label>
-                        <input className="text-input" type={newIsVisible ? 'text' : 'password'} />
-                        <VisibilityIcon visible={newIsVisible} change={setNewIsVisible} />
+                        <input className="text-input" type={passwordIsVisible ? 'text' : 'password'} onChange={(e) => setOldPassword(e.target.value)} />
+                        <VisibilityIcon visible={passwordIsVisible} change={setPasswordIsVisible} />
                     </div>
                 </form>
                 <div className='flex gap-2 mt-4'>
                     <Dialog.Close onClick={resetVisibility} className='w-full py-2 border rounded hover:bg-gray-50'>Cancel</Dialog.Close>
                     <button form='pwform' className='w-full py-2 text-white bg-blue-500 border rounded hover:bg-blue-600'>Update</button>
                 </div>
+                {updateError && <ErrorMssg mssg={updateError} />}
             </Dialog.Content>
         </Dialog.Portal>
     )

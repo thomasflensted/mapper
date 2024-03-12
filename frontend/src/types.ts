@@ -21,12 +21,13 @@ export type Map = {
 export type Maps = Map[]
 
 export type User = {
+    _id: string,
+    email: string,
     first_name: string,
     last_name: string,
     profile_picture: string,
-    email: string,
-    password: string,
-}
+    token: string
+} | null
 
 export type Filter = {
     name: FilterName,
@@ -35,13 +36,5 @@ export type Filter = {
 }
 
 export type Filters = Filter[]
-
-export type UserType = {
-    first_name: string,
-    last_name: string,
-    email: string,
-    profile_picture: string,
-    token: string,
-}
 
 export type View = 'list' | 'marker';

@@ -1,5 +1,5 @@
 // react imports
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 // components
 import FiltersExpander from './FiltersExpander';

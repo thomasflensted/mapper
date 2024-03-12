@@ -21,8 +21,15 @@ const getAllUsers = async (req, res) => {
 const getSingleUser = async (req, res) => {
     const _id = req.params.user_id;
     try {
-        const user = await User.findOne({ _id });
-        res.status(200).json(user);
+        const updatedUser = await User.findOne({ _id });
+        res.status(200).json({
+            _id: updatedUser._id,
+            email: updatedUser.email,
+            first_name: updatedUser.first_name,
+            last_name: updatedUser.last_name,
+            profile_picture: updatedUser.profile_picture,
+            token: updatedUser.token,
+        });
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
@@ -32,10 +39,18 @@ const getSingleUser = async (req, res) => {
 const updateNames = async (req, res) => {
     const { email, first_name, last_name } = req.body;
     try {
-        const response = await User.updateNames(email, first_name, last_name)
-        res.status(200).json(response);
+        const updatedUser = await User.updateNames(email, first_name, last_name)
+        const token = createToken(updatedUser._id);
+        res.status(200).json({
+            _id: updatedUser._id,
+            email: updatedUser.email,
+            first_name: updatedUser.first_name,
+            last_name: updatedUser.last_name,
+            profile_picture: updatedUser.profile_picture,
+            token
+        });
     } catch (err) {
-        res.status(400).json({ error: err.message })
+        res.status(400).json({ message: err.message })
     }
 }
 
@@ -43,8 +58,16 @@ const updateNames = async (req, res) => {
 const updateEmail = async (req, res) => {
     const { oldEmail, newEmail, password } = req.body;
     try {
-        const response = await User.updateEmail(oldEmail, newEmail, password)
-        res.status(200).json(response);
+        const updatedUser = await User.updateEmail(oldEmail, newEmail, password)
+        const token = createToken(updatedUser._id);
+        res.status(200).json({
+            _id: updatedUser._id,
+            email: updatedUser.email,
+            first_name: updatedUser.first_name,
+            last_name: updatedUser.last_name,
+            profile_picture: updatedUser.profile_picture,
+            token
+        });
     } catch (err) {
         res.status(400).json({ error: err.message })
     }
@@ -54,8 +77,16 @@ const updateEmail = async (req, res) => {
 const updatePassword = async (req, res) => {
     const { email, oldPasswordTyped, newPassword, newPasswordRepeat } = req.body;
     try {
-        const response = await User.updatePassword(email, newPassword, oldPasswordTyped, newPasswordRepeat);
-        res.status(200).json(response);
+        const updatedUser = await User.updatePassword(email, newPassword, oldPasswordTyped, newPasswordRepeat);
+        const token = createToken(updatedUser._id);
+        res.status(200).json({
+            _id: updatedUser._id,
+            email: updatedUser.email,
+            first_name: updatedUser.first_name,
+            last_name: updatedUser.last_name,
+            profile_picture: updatedUser.profile_picture,
+            token
+        });
     } catch (err) {
         res.status(400).json({ error: err.message })
     }
@@ -87,6 +118,7 @@ const logInUser = async (req, res) => {
         const user = await User.login(email, password);
         const token = createToken(user._id);
         res.status(200).json({
+            _id: user._id,
             first_name: user.first_name,
             last_name: user.last_name,
             email: user.email,
@@ -105,6 +137,7 @@ const signUpUser = async (req, res) => {
         const newUser = await User.signup(first_name, last_name, profile_picture, email, password);
         const token = createToken(newUser._id);
         res.status(200).json({
+            _id: newUser._id,
             first_name: newUser.first_name,
             last_name: newUser.last_name,
             email: newUser.email,

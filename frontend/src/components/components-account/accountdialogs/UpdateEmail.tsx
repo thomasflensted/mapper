@@ -2,15 +2,29 @@ import * as Dialog from '@radix-ui/react-dialog';
 import VisibilityIcon from '../../components-misc/VisibilityIcon';
 import { FormEvent, useState } from 'react';
 import { useAuthContext } from '../../../hooks/useAuthContext';
+import useUpdateUser from '../../../hooks/useUpdateUser';
+import { ErrorMssg } from '../../components-misc/ErrorAndSuccess';
 
-const UpdateEmail = ({ setOpen }: { setOpen: Function }) => {
+type ComponentProps = {
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>,
+    setSuccess: React.Dispatch<React.SetStateAction<string>>,
+}
 
+const UpdateEmail = ({ setOpen, setSuccess }: ComponentProps) => {
+
+    const { user, authDispatch } = useAuthContext();
+    const { updateEmail, updateError } = useUpdateUser();
     const [passwordIsVisible, setPasswordIsVisible] = useState(false);
-    const { user } = useAuthContext();
-    const [email, setEmail] = useState(user?.email);
+    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState(user?.email || '');
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const updatedUser = await updateEmail(user, email, password);
+        if (!updatedUser) return;
+        authDispatch({ type: 'LOGIN', payload: updatedUser });
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        setSuccess("Account email was successfully updated");
         setOpen(false);
     }
 
@@ -27,7 +41,7 @@ const UpdateEmail = ({ setOpen }: { setOpen: Function }) => {
                     </div>
                     <div className='relative mb-4'>
                         <label className='mr-1 text-xs text-gray-600'>Password</label>
-                        <input className="text-input" type={passwordIsVisible ? 'text' : 'password'} />
+                        <input onChange={(e) => setPassword(e.target.value)} className="text-input" type={passwordIsVisible ? 'text' : 'password'} />
                         <VisibilityIcon visible={passwordIsVisible} change={setPasswordIsVisible} />
                     </div>
                 </form>
@@ -35,7 +49,7 @@ const UpdateEmail = ({ setOpen }: { setOpen: Function }) => {
                     <Dialog.Close className='w-full py-2 border rounded hover:bg-gray-50'>Cancel</Dialog.Close>
                     <button form='emailform' className='w-full py-2 text-white bg-blue-500 border rounded hover:bg-blue-600'>Update</button>
                 </div>
-
+                {updateError && <ErrorMssg mssg={updateError} />}
             </Dialog.Content>
         </Dialog.Portal>
     )

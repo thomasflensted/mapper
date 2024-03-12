@@ -78,8 +78,7 @@ UserSchema.statics.updateEmail = async function (oldEmail, newEmail, password) {
     }
 
     const updatedUser = await this.findOneAndUpdate({ email: oldEmail }, { email: newEmail }, { returnDocument: 'after' });
-    const response = { message: "Succesfully updated user's email.", updatedUser };
-    return response;
+    return updatedUser;
 
 }
 
@@ -104,8 +103,8 @@ UserSchema.statics.updateNames = async function (email, first_name, last_name) {
         { first_name: capitalizedFirstName, last_name: capitalizedLastName },
         { returnDocument: 'after' }
     );
-    const response = { message: "Successfully updated user's names.", updatedUser }
-    return response;
+
+    return updatedUser;
 }
 
 UserSchema.statics.updatePassword = async function (email, newPassword, oldPasswordTyped, newPasswordRepeat) {
@@ -129,9 +128,9 @@ UserSchema.statics.updatePassword = async function (email, newPassword, oldPassw
 
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(newPassword, salt);
+
     const updatedUser = await this.findOneAndUpdate({ email }, { password: passwordHash }, { returnDocument: 'after' });
-    const response = { mssg: "Successfully updated user's password", updatedUser }
-    return response;
+    return updatedUser;
 }
 
 const capitalizeFirstLetter = (text) => {
