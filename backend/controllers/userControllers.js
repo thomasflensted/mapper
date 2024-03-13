@@ -13,7 +13,7 @@ const getAllUsers = async (req, res) => {
         const allUsers = await User.find({});
         res.status(200).json(allUsers.length === 0 ? { mssg: "No users exist" } : allUsers);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        res.status(400).json({ message: err.message });
     }
 }
 
@@ -31,7 +31,7 @@ const getSingleUser = async (req, res) => {
             token: updatedUser.token,
         });
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        res.status(400).json({ message: err.message });
     }
 }
 
@@ -69,15 +69,15 @@ const updateEmail = async (req, res) => {
             token
         });
     } catch (err) {
-        res.status(400).json({ error: err.message })
+        res.status(400).json({ message: err.message })
     }
 }
 
 // update users email - uses function on user model
 const updatePassword = async (req, res) => {
-    const { email, oldPasswordTyped, newPassword, newPasswordRepeat } = req.body;
+    const { email, oldPassword, newPassword, newPasswordRepeat } = req.body;
     try {
-        const updatedUser = await User.updatePassword(email, newPassword, oldPasswordTyped, newPasswordRepeat);
+        const updatedUser = await User.updatePassword(email, oldPassword, newPassword, newPasswordRepeat);
         const token = createToken(updatedUser._id);
         res.status(200).json({
             _id: updatedUser._id,
@@ -88,7 +88,7 @@ const updatePassword = async (req, res) => {
             token
         });
     } catch (err) {
-        res.status(400).json({ error: err.message })
+        res.status(400).json({ message: err.message })
     }
 }
 
@@ -107,7 +107,7 @@ const deleteUser = async (req, res) => {
             deletedPlaces: placeResponse.deletedCount
         });
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        res.status(400).json({ message: err.message });
     }
 }
 
@@ -126,15 +126,15 @@ const logInUser = async (req, res) => {
             token
         });
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        res.status(400).json({ message: err.message });
     }
 }
 
 // sign up - uses function on user model
 const signUpUser = async (req, res) => {
-    const { first_name, last_name, email, profile_picture, password } = req.body;
+    const { first_name, last_name, email, profile_picture, password, passwordRepeat } = req.body;
     try {
-        const newUser = await User.signup(first_name, last_name, profile_picture, email, password);
+        const newUser = await User.signup(first_name, last_name, profile_picture, email, password, passwordRepeat);
         const token = createToken(newUser._id);
         res.status(200).json({
             _id: newUser._id,
@@ -145,7 +145,7 @@ const signUpUser = async (req, res) => {
             token
         });
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        res.status(400).json({ message: err.message });
     }
 }
 

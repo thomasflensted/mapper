@@ -13,32 +13,29 @@ const UserSchema = new Schema({
 
 UserSchema.statics.login = async function (email, password) {
 
-    if (!email || !password) {
-        throw Error("Both fields must be filled out.")
-    }
+    if (!email) throw Error("Email field must be filled out.");
+    if (!password) throw Error("Password field must be filled out.");
 
     const user = await this.findOne({ email });
-    if (!user) {
-        throw Error("Invalid email address.");
-    }
+    if (!user) throw Error("Invalid email address.");
 
     const match = await bcrypt.compare(password, user.password);
-    if (!match) {
-        throw Error("Invalid password");
-    }
+    if (!match) throw Error("Invalid password");
 
     return user;
 }
 
-UserSchema.statics.signup = async function (first_name, last_name, profile_picture, email, password) {
+UserSchema.statics.signup = async function (first_name, last_name, profile_picture, email, password, passwordRepeat) {
+
+    if (!first_name) throw Error("First name field must be filled out");
+    if (!email) throw Error("Email field must be filled out");
+    if (!validator.isEmail(email)) throw Error("Invalid email address.");
+    if (!password || !passwordRepeat) throw Error("Password fields must be filled out");
+    if (password !== passwordRepeat) throw Error("Passwords are not matching.");
 
     const exists = await this.findOne({ email });
     if (exists) {
-        throw Error("A user with that email address already exists.");
-    }
-
-    if (!validator.isEmail(email)) {
-        throw Error("Invalid email address.");
+        throw Error("A user with that email already exists.");
     }
 
     if (!validator.isStrongPassword(password)) {
@@ -58,24 +55,17 @@ UserSchema.statics.signup = async function (first_name, last_name, profile_pictu
 UserSchema.statics.updateEmail = async function (oldEmail, newEmail, password) {
 
     if (!newEmail) throw Error("Email field must be filled out.");
+    if (!validator.isEmail(newEmail)) throw Error("New email address is invalid.");
+    if (newEmail === oldEmail) throw Error("Nothing to update.");
 
     const user = await this.findOne({ email: oldEmail });
-    if (!user) {
-        throw Error("Couldn't find user. Please refresh the page or log out and in again.")
-    }
+    if (!user) throw Error("Something went wrong. Please refresh the page or log out and in again.");
 
-    if (newEmail === oldEmail) {
-        throw Error("Nothing to update.")
-    }
-
-    if (!validator.isEmail(newEmail)) {
-        throw Error("New email address is invalid.")
-    }
+    const anotherUserExists = await this.findOne({ email: newEmail });
+    if (anotherUserExists) throw Error("Another user with that email address already exists.");
 
     const isCorrectpassword = await bcrypt.compare(password, user.password);
-    if (!isCorrectpassword) {
-        throw Error("Incorrect password");
-    }
+    if (!isCorrectpassword) throw Error("Incorrect password");
 
     const updatedUser = await this.findOneAndUpdate({ email: oldEmail }, { email: newEmail }, { returnDocument: 'after' });
     return updatedUser;
@@ -107,24 +97,20 @@ UserSchema.statics.updateNames = async function (email, first_name, last_name) {
     return updatedUser;
 }
 
-UserSchema.statics.updatePassword = async function (email, newPassword, oldPasswordTyped, newPasswordRepeat) {
+//email: user.email,oldPassword,newPassword,newPasswordRepeat
 
-    if (!newPassword || !newPasswordRepeat) throw Error("Both password fields must be filled out.");
-    if (newPassword !== newPasswordRepeat) throw Error("New passwords are not matching.");
+UserSchema.statics.updatePassword = async function (email, oldPassword, newPassword, newPasswordRepeat) {
+
+    if (!newPassword || !newPasswordRepeat || !oldPassword) throw Error("All fields must be filled out.");
+    if (newPassword !== newPasswordRepeat) throw Error("Passwords are not matching.");
 
     const user = await this.findOne({ email });
-    if (!user) {
-        throw Error("Couldn't find user. Please refresh the page or log out and in again.")
-    }
+    if (!user) throw Error("Something went wrong. Please refresh the page or log out and in again.");
 
-    const isCorrectpassword = await bcrypt.compare(oldPasswordTyped, user.password);
-    if (!isCorrectpassword) {
-        throw Error("Incorrect password");
-    }
+    const isCorrectpassword = await bcrypt.compare(oldPassword, user.password);
+    if (!isCorrectpassword) throw Error("Incorrect password");
 
-    if (!validator.isStrongPassword(newPassword)) {
-        throw Error("Password is too weak.")
-    }
+    if (!validator.isStrongPassword(newPassword)) throw Error("Password is too weak.");
 
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(newPassword, salt);

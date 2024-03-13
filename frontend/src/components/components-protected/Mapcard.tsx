@@ -9,7 +9,9 @@ export type Variants = {
     after: { opacity: number, y: number, scale: number }
 };
 
-const MapCard = ({ variants }: { variants: Variants }) => {
+const MapCard = ({ variants, name, description, id }: { variants: Variants, name: string, description: string, id: string }) => {
+
+    const mapData = { name, description, id };
 
     return (
         <motion.div
@@ -19,17 +21,15 @@ const MapCard = ({ variants }: { variants: Variants }) => {
                 <DropdownMenu.Trigger asChild>
                     <HamburgerMenuIcon className='absolute text-white top-4 right-4' />
                 </DropdownMenu.Trigger>
-                <MapCardDropdown />
+                <MapCardDropdown mapData={mapData} />
             </DropdownMenu.Root>
             <img className='rounded-lg' src={mapexample} alt="" />
             <div className='flex flex-col justify-center h-full text-center'>
-                <h1 className='mb-1 text-sm font-bold text-blue-600 '>My Favorite Restaurants</h1>
-                <p className='text-xs text-blue-500'>A description of my favorite restaurants around the world</p>
+                <h1 className='mb-1 text-sm font-bold text-blue-600 '>{name}</h1>
+                <p className='text-xs text-blue-500'>{description}</p>
             </div>
         </motion.div>
     )
 }
 
 export default MapCard
-
-// 

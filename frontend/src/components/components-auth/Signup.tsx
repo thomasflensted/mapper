@@ -6,7 +6,6 @@ import { useSignup } from "../../hooks/useSignup"
 
 const Signup = () => {
 
-    const [error, setError] = useState('')
     const [password, setPassword] = useState('');
     const [passwordRepeat, setPasswordRepeat] = useState('');
     const [passwordIsVisible, setPasswordIsVisible] = useState(false);
@@ -16,21 +15,12 @@ const Signup = () => {
     const setterFuncs = [setFirstName, setLastName, setEmail, setPassword, setPasswordRepeat];
     const { signup, signUpError } = useSignup();
 
+    // move all error handling onto server! Makes it easier to handle the errormessage and cleans up code here
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
-        setError(detectErrors());
-        const signUpCreds = { first_name, last_name, email, profile_picture: '', password }
-        if (!error) {
-            await signup(signUpCreds)
-        };
-    }
-
-    const detectErrors = (): string => {
-        if (!first_name) return "First name field must be filled out";
-        if (!email) return "Email field must be filled out";
-        if (!password || !passwordRepeat) return 'Password fields must be filled out';
-        if (password !== passwordRepeat) return "Passwords are not matching"
-        return '';
+        const signUpCreds = { first_name, last_name, email, profile_picture: '', password, passwordRepeat };
+        await signup(signUpCreds)
     }
 
     const forms = [
@@ -58,7 +48,6 @@ const Signup = () => {
                 )}
                 <button type="submit" form='userform' className="btn-blue">Create Account</button>
             </form>
-            {error && <ErrorMssg mssg={error} />}
             {signUpError && <ErrorMssg mssg={signUpError} />}
             <Link to='/login' className="text-xs underline ">Already have An Account? Log In Here.</Link>
         </div>

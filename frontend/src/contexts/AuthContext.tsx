@@ -1,12 +1,12 @@
-import { ReactNode, createContext, useReducer, useEffect } from "react";
-import { User } from "../types";
+import { ReactNode, createContext, useReducer } from "react";
+import { User } from "../types/userTypes";
 
 export type UserType = User;
 export type StateType = { user: User };
 export type ActionType = { type: string, payload: User }
-export type UserContextType = { user: User, authDispatch: React.Dispatch<ActionType> }
+export type UserContextType = { user: User, authDispatch: React.Dispatch<ActionType> } | null;
 
-export const AuthContext = createContext<UserContextType>({ user: null, authDispatch: () => { } });
+export const AuthContext = createContext<UserContextType>(null);
 
 const authReducer = (state: StateType, action: ActionType): StateType => {
     switch (action.type) {
@@ -21,15 +21,11 @@ const authReducer = (state: StateType, action: ActionType): StateType => {
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
-    const initialState: StateType = { user: null };
+    const userExists: string | null = localStorage.getItem('user');
+    const initialState: StateType = { user: userExists ? JSON.parse(userExists) : null };
+
     const [state, authDispatch] = useReducer(authReducer, initialState);
-
-    useEffect(() => {
-        const user: string | null = localStorage.getItem('user');
-        if (user) authDispatch({ type: "LOGIN", payload: JSON.parse(user) });
-    }, [])
-
-    console.log(state.user ? `User with name ${state.user.first_name} is logged in.` : "Auth state: Logged out.");
+    console.log(state.user ? `${state.user.first_name} is logged in.` : "Auth state: Logged out.");
 
     return (
         <AuthContext.Provider value={{ ...state, authDispatch }}>

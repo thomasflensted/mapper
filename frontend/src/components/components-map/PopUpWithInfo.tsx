@@ -1,6 +1,6 @@
 import { Popup } from "react-map-gl"
 import { IoMdClose } from "react-icons/io";
-import { Place } from "../../types";
+import { Place } from "../../types/miscTypes";
 
 type PopUpProps = {
     place: Place | null,

@@ -1,38 +1,40 @@
-import thomas from '/Users/thomasflensted/Documents/03 PROJECTS/mapper/frontend/src/assets/thomas.webp'
-import { Pencil1Icon } from '@radix-ui/react-icons'
-import { Link } from 'react-router-dom';
+// components
 import UpdateName from './accountdialogs/UpdateName';
 import UpdateEmail from './accountdialogs/UpdateEmail';
 import UpdatePassword from './accountdialogs/UpdatePassword';
+import AccountRow from './AccountRow';
+import { ErrorMssg, SuccessMssg } from '../components-misc/ErrorAndSuccess';
+import { Link } from 'react-router-dom';
+
+// react
 import { useState } from 'react';
+
+// hooks
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { useLogout } from '../../hooks/useLogout';
-import AccountRow from './AccountRow';
-import { SuccessMssg } from '../components-misc/ErrorAndSuccess';
+import DeleteDropDown from './DeleteDropDown';
+import AccountPicture from './AccountPicture';
 
 
 const Account = () => {
 
+    // state
     const [nameIsOpen, setNameIsOpen] = useState(false);
     const [emailIsOpen, setEmailIsOpen] = useState(false);
     const [passwordIsOpen, setPasswordIsOpen] = useState(false);
+    const [deleteError, setDeleteError] = useState('')
     const [success, setSuccess] = useState('');
+
+    // hooks
     const { user } = useAuthContext();
     const { logout } = useLogout();
 
-    const handleLogout = () => {
-        logout();
-    }
-
     return (
-        <div className="flex px-12 flex-col border text-sm text-gray-500 gap-8 w-1/3 p-8 rounded-lg h-min shadow-[0_0_60px_0px_rgba(0,0,0,0.05)] animate-page-slide-up">
+        <div className="relative flex px-12 flex-col border text-sm text-gray-500 gap-8 w-1/3 p-8 rounded-lg h-min shadow-[0_0_60px_0px_rgba(0,0,0,0.05)] animate-page-slide-up">
 
-            <div className="relative m-auto overflow animate-scale-up">
-                <img className='w-[90px] h-[90px] rounded-full shadow-lg' src={thomas} />
-                <div className='absolute bottom-[10px] right-[-4px] rounded-full shadow-md p-1 bg-white hover:scale-125 transition ease'>
-                    <Pencil1Icon className='text-black' />
-                </div>
-            </div>
+            <DeleteDropDown setError={setDeleteError} />
+
+            <AccountPicture />
 
             <AccountRow text={`${user?.first_name} ${user?.last_name}`} heading='Name' openState={nameIsOpen} openController={setNameIsOpen}>
                 <UpdateName setOpen={setNameIsOpen} setSuccess={setSuccess} />
@@ -51,10 +53,10 @@ const Account = () => {
                     <Link className='w-full' to='/'>
                         <button className="w-full btn-blue">Go To Maps</button>
                     </Link>
-                    <button className='w-full btn-red'>Delete Account</button>
+                    <button onClick={logout} className='w-full btn-red'>Log Out</button>
                 </div>
-                <button onClick={handleLogout} className='w-full btn-red'>Log Out</button>
                 {success && <SuccessMssg mssg={success} />}
+                {deleteError && <ErrorMssg mssg={deleteError} />}
             </div>
         </div>
     )

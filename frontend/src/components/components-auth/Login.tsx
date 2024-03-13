@@ -8,20 +8,13 @@ const Login = () => {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [error, setError] = useState('')
     const [passwordIsVisible, setPasswordIsVisible] = useState(false);
     const { loginError, login } = useLogin();
 
-
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!email || !password) {
-            setError("Both fields must be filled out.")
-            return;
-        }
         await login(email, password);
     }
-
 
     return (
         <div className="flex flex-col w-1/4 p-8 border rounded-lg h-min shadow-[0_0_60px_0px_rgba(0,0,0,0.05)] animate-page-slide-up">
@@ -38,7 +31,6 @@ const Login = () => {
                 </div>
                 <button form="login" className="btn-blue">Log In</button>
             </form>
-            {error && <ErrorMssg mssg={error} />}
             {loginError && <ErrorMssg mssg={loginError} />}
             <Link to='/signup' className="text-xs underline ">New User? Sign Up Here.</Link>
         </div>

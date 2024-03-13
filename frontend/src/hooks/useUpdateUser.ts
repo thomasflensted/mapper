@@ -1,14 +1,25 @@
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 import { useState } from "react";
-import { User } from "../types";
+import { useAuthContext } from "./useAuthContext";
 
-type UserArgument = User | null | undefined;
+const handleResponse = async (response: Response, setUpdateError: React.Dispatch<React.SetStateAction<string>>) => {
+
+    const json = await response.json();
+    if (!response.ok) {
+        setUpdateError(json.message);
+        return null;
+    } else {
+        localStorage.setItem('user', JSON.stringify(json));
+    }
+    return json;
+}
 
 export const useUpdateUser = () => {
 
     const [updateError, setUpdateError] = useState('');
+    const { authDispatch, user } = useAuthContext();
 
-    const updateUserName = async (user: UserArgument, first_name: string, last_name: string) => {
+    const updateUserName = async (first_name: string, last_name: string) => {
 
         if (!user) return;
 
@@ -18,16 +29,14 @@ export const useUpdateUser = () => {
             body: JSON.stringify({ email: user.email, first_name, last_name })
         })
 
-        const data = await response.json();
-
-        if (!response.ok) {
-            setUpdateError(data.message);
-            return null;
+        const result = await handleResponse(response, setUpdateError);
+        if (result) {
+            authDispatch({ type: "LOGIN", payload: result })
+            return "Account name was successfully updated."
         }
-        return data;
     }
 
-    const updateEmail = async (user: UserArgument, newEmail: string, password: string) => {
+    const updateEmail = async (newEmail: string, password: string) => {
 
         if (!user) return;
 
@@ -36,15 +45,15 @@ export const useUpdateUser = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ oldEmail: user.email, newEmail, password })
         })
-        const data = await response.json();
-        if (!response.ok) {
-            setUpdateError(data.error);
-            return null;
+
+        const result = await handleResponse(response, setUpdateError);
+        if (result) {
+            authDispatch({ type: "LOGIN", payload: result })
+            return "Account email was successfully updated."
         }
-        return data;
     }
 
-    const updatePassword = async (user: UserArgument, oldPassword: string, newPassword: string, newPasswordRepeat: string) => {
+    const updatePassword = async (oldPassword: string, newPassword: string, newPasswordRepeat: string) => {
 
         if (!user) return;
 
@@ -53,22 +62,35 @@ export const useUpdateUser = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 email: user.email,
-                oldPasswordTyped: oldPassword,
+                oldPassword,
                 newPassword,
                 newPasswordRepeat
             })
         })
 
-        const data = await response.json();
-
-        if (!response.ok) {
-            setUpdateError(data.error);
-            return null;
+        const result = await handleResponse(response, setUpdateError);
+        if (result) {
+            authDispatch({ type: "LOGIN", payload: result })
+            return "Account password was successfully updated."
         }
-        return data;
     }
 
-    return { updateUserName, updateEmail, updatePassword, updateError }
+    const deleteUser = async () => {
+
+        if (!user) return { success: false, mssg: "Something went wrong when deleting your account." };
+
+        const response = await fetch(`${BASE_URL}/user/${user._id}`, { method: 'DELETE' });
+        if (!response.ok) {
+            return { success: false, mssg: "Something went wrong when deleting your account." }
+        } else {
+            localStorage.removeItem('user');
+            authDispatch({ type: 'LOGOUT', payload: null });
+            return { success: true, mssg: "Account was successfully deleted" }
+        }
+
+    }
+
+    return { updateUserName, updateEmail, updatePassword, deleteUser, updateError, setUpdateError }
 }
 
 export default useUpdateUser;

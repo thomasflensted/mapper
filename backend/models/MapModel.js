@@ -3,15 +3,15 @@ const Schema = mongoose.Schema;
 const Place = require('./PlaceModel')
 
 const MapSchema = new Schema({
-    map_name: { type: String, required: true },
-    map_description: { type: String },
+    name: { type: String, required: true },
+    description: { type: String },
     user_id: { type: String, required: true }
 })
 
-MapSchema.statics.createMap = async function (map_name, map_description, user_id) {
+MapSchema.statics.createMap = async function (name, description, user_id) {
 
-    if (!map_name) throw Error("Map name is required.");
-    const createdMap = await this.create({ map_name, map_description, user_id });
+    if (!name) throw Error("Map name is required.");
+    const createdMap = await this.create({ name, description, user_id });
     if (!createdMap) throw Error("Something went wrong when creating the map. Please refresh the page and try again.")
     return createdMap;
 }

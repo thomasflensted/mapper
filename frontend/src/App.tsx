@@ -11,6 +11,7 @@ import Account from "./components/components-account/Account"
 import UserHome from './components/components-protected/UserHome'
 import CreateNewMap from './components/components-protected/CreateNewMap'
 import { useAuthContext } from './hooks/useAuthContext'
+import { MapContextProvider } from './contexts/MapContext'
 
 function App() {
 
@@ -21,13 +22,16 @@ function App() {
       <BrowserRouter>
         <NavBar />
         <main className="flex justify-center grow">
-          <Routes>
-            <Route path='/' element={user ? <UserHome /> : <Home />} />
-            <Route path='/login' element={!user ? <Login /> : <Navigate to='/' />} />
-            <Route path='/signup' element={!user ? <Signup /> : <Navigate to='/' />} />
-            <Route path='/account' element={user ? <Account /> : <Navigate to='/' />} />
-            <Route path='/createmap' element={user ? <CreateNewMap /> : <Navigate to='/' />} />
-          </Routes>
+          <MapContextProvider>
+            <Routes>
+              <Route path='/login' element={!user ? <Login /> : <Navigate to='/' />} />
+              <Route path='/signup' element={!user ? <Signup /> : <Navigate to='/' />} />
+              <Route path='/account' element={user ? <Account /> : <Navigate to='/' />} />
+              <Route path='/' element={user ? <UserHome /> : <Home />} />
+              <Route path='/createmap' element={user ? <CreateNewMap /> : <Navigate to='/' />} />
+              <Route path='/editmap' element={user ? <CreateNewMap /> : <Navigate to='/' />} />
+            </Routes>
+          </MapContextProvider>
         </main>
       </BrowserRouter>
       <Footer />

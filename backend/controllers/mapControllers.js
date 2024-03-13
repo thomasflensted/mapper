@@ -4,9 +4,9 @@ const Place = require('../models/PlaceModel')
 
 // create new map - properties in request body
 const createSingleMap = async (req, res) => {
-    const { map_name, map_description, user_id } = req.body;
+    const { name, description, user_id } = req.body;
     try {
-        const map = await Map.createMap(map_name, map_description, user_id);
+        const map = await Map.createMap(name, description, user_id);
         res.status(200).json(map);
     } catch (err) {
         res.status(400).json({ mssg: err.message });

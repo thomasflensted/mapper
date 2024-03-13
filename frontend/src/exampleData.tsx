@@ -1,4 +1,4 @@
-import { Places, Map } from "./types"
+import { Places, Map } from "./types/miscTypes"
 export const places: Places = [
     {
         name: 'Via Carota',

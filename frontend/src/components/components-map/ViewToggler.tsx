@@ -1,5 +1,5 @@
 import { motion } from "framer-motion"
-import { View } from "../../types";
+import { View } from "../../types/miscTypes";
 
 const ViewToggler = ({ view, setView }: { view: View, setView: React.Dispatch<React.SetStateAction<View>> }) => {
 

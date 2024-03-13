@@ -9,7 +9,7 @@ import ViewToggler from './ViewToggler';
 
 // types and data
 import { places } from '../../exampleData';
-import { PlaceType, Places, View, Place } from '../../types';
+import { PlaceType, Places, View, Place } from '../../types/miscTypes';
 
 const MapContainer = () => {
 

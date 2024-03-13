@@ -1,6 +1,6 @@
 import { Map } from 'react-map-gl';
 import { ReactNode, useState, useRef, useEffect } from "react";
-import { Places, View, Place } from "../../types";
+import { Places, View, Place } from "../../types/miscTypes";
 import mapboxgl from 'mapbox-gl';
 import MarkerComponent from "./MarkerComponent";
 import PopUpWithSignUpButton from "./PopUpWithSignUpButton";

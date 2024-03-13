@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Place, Places, View } from "../../types";
+import { Place, Places, View } from "../../types/miscTypes";
 import { capitalizeFirstLetter } from "./PopUpWithInfo";
 
 type MapListProps = {

@@ -5,7 +5,6 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 export const useSignup = () => {
 
     const [signUpError, setSignUpError] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
     const { authDispatch } = useAuthContext();
 
     type signupArgs = {
@@ -13,14 +12,14 @@ export const useSignup = () => {
         last_name: string,
         email: string,
         profile_picture: string,
-        password: string
+        password: string,
+        passwordRepeat: string,
     };
 
     const signup = async (args: signupArgs) => {
-        setIsLoading(true);
         setSignUpError('');
 
-        const response = await fetch(`${BASE_URL}/user/login`, {
+        const response = await fetch(`${BASE_URL}/user/signup`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -28,16 +27,14 @@ export const useSignup = () => {
             body: JSON.stringify({ ...args })
         });
 
-        const user = await response.json();
+        const json = await response.json();
 
         if (!response.ok) {
-            setIsLoading(false);
-            setSignUpError(user.error);
+            setSignUpError(json.message);
         } else {
-            localStorage.setItem('user', JSON.stringify(user))
-            authDispatch({ type: "LOGIN", payload: user })
-            setIsLoading(false);
+            localStorage.setItem('user', JSON.stringify(json))
+            authDispatch({ type: "LOGIN", payload: json })
         }
     }
-    return { signup, signUpError, isLoading };
+    return { signup, signUpError };
 }
