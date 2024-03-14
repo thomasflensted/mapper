@@ -1,3 +1,4 @@
+import { Cross2Icon } from "@radix-ui/react-icons";
 import { useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -8,14 +9,16 @@ type FormProps = {
 
 export const FormMapName = ({ setName, name }: FormProps) => {
 
+    const NAME_MAX_LENGTH: number = 20;
+
     const inputRef = useRef<HTMLInputElement>(null);
     useEffect(() => { if (inputRef.current) inputRef.current.focus() }, [])
 
     return (
         <div className="relative">
-            <label className="text-sm" htmlFor="">Map Name</label>
-            <input ref={inputRef} value={name} maxLength={30} onChange={(e) => setName(e.target.value)} className="w-full p-2 mt-1 text-xs border rounded shadow-sm" type="text" />
-            <span className="absolute top-[34px] right-[10px] text-gray-300 text-xs">{`${name.length}/30`}</span>
+            <label className="text-xs">Map Name</label>
+            <input ref={inputRef} value={name} maxLength={NAME_MAX_LENGTH} onChange={(e) => setName(e.target.value)} className="w-full p-2 mt-1 text-xs border rounded shadow-sm" type="text" />
+            <span className="absolute top-[34px] right-[10px] text-gray-300 text-xs">{`${name.length}/${NAME_MAX_LENGTH}`}</span>
         </div>
     )
 }
@@ -26,12 +29,15 @@ type FormDescProps = {
 }
 
 export const FormMapDesc = ({ desc, setDesc }: FormDescProps) => {
+
+    const DESC_MAX_LENGTH: number = 50;
+
     return (
         <div className="relative mt-4">
-            <label className="" htmlFor="">Map Description</label>
+            <label className="text-xs">Map Description</label>
             <span className="italic text-gray-300"> - optional</span>
-            <input value={desc} maxLength={50} onChange={(e) => setDesc(e.target.value)} className="w-full p-2 mt-1 text-xs border rounded shadow-sm" type="text" />
-            <span className="absolute top-[34px] right-[10px] text-gray-300 text-xs">{`${desc.length}/50`}</span>
+            <input value={desc} maxLength={DESC_MAX_LENGTH} onChange={(e) => setDesc(e.target.value)} className="w-full p-2 mt-1 text-xs border rounded shadow-sm" type="text" />
+            <span className="absolute top-[34px] right-[10px] text-gray-300 text-xs">{`${desc.length}/${DESC_MAX_LENGTH}`}</span>
         </div>
     )
 }
@@ -59,5 +65,12 @@ export const FormButtons = ({ hasChanged, isNewMap }: FormButtonsProps) => {
                 {isNewMap ? 'Create Map' : "Save"}
             </button>
         </div>
+    )
+}
+
+export const CloseBtn = () => {
+    const navigate = useNavigate();
+    return (
+        <Cross2Icon onClick={() => navigate('/')} className="absolute top-4 right-4 hover:cursor-pointer" />
     )
 }

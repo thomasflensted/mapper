@@ -9,7 +9,14 @@ export type Variants = {
     after: { opacity: number, y: number, scale: number }
 };
 
-const MapCard = ({ variants, name, description, id }: { variants: Variants, name: string, description: string, id: string }) => {
+type MapCardProps = {
+    variants: Variants,
+    name: string,
+    description: string,
+    id: string
+}
+
+const MapCard = ({ variants, name, description, id }: MapCardProps) => {
 
     const mapData = { name, description, id };
 
@@ -26,7 +33,7 @@ const MapCard = ({ variants, name, description, id }: { variants: Variants, name
             <img className='rounded-lg' src={mapexample} alt="" />
             <div className='flex flex-col justify-center h-full text-center'>
                 <h1 className='mb-1 text-sm font-bold text-blue-600 '>{name}</h1>
-                <p className='text-xs text-blue-500'>{description}</p>
+                <p className='px-4 text-xs text-blue-500'>{description}</p>
             </div>
         </motion.div>
     )
