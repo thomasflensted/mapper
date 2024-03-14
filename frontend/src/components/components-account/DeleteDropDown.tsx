@@ -2,7 +2,7 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import DeleteWarning from '../components-misc/DeleteWarning';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
-import useUpdateUser from '../../hooks/useUpdateUser';
+import useUpdateUser from '../../hooks/user-hooks/useUpdateUser';
 
 const DeleteDropDown = ({ setError }: { setError: React.Dispatch<React.SetStateAction<string>> }) => {
 

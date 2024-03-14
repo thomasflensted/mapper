@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Place = require('./PlaceModel')
+const validator = require('validator');
 
 const MapSchema = new Schema({
     name: { type: String, required: true },
@@ -11,6 +12,7 @@ const MapSchema = new Schema({
 MapSchema.statics.createMap = async function (name, description, user_id) {
 
     if (!name) throw Error("Map name is required.");
+    if (!validator.isMongoId(user_id)) throw Error("Something went wrong. Please log out and in again.");
     const createdMap = await this.create({ name, description, user_id });
     if (!createdMap) throw Error("Something went wrong when creating the map. Please refresh the page and try again.")
     return createdMap;

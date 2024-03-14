@@ -38,7 +38,7 @@ UserSchema.statics.signup = async function (first_name, last_name, profile_pictu
         throw Error("A user with that email already exists.");
     }
 
-    if (!validator.isStrongPassword(password)) {
+    if (!validator.isStrongPassword(password, { minSymbols: 0 })) {
         throw Error("Password is not strong enough.");
     }
 
@@ -110,7 +110,7 @@ UserSchema.statics.updatePassword = async function (email, oldPassword, newPassw
     const isCorrectpassword = await bcrypt.compare(oldPassword, user.password);
     if (!isCorrectpassword) throw Error("Incorrect password");
 
-    if (!validator.isStrongPassword(newPassword)) throw Error("Password is too weak.");
+    if (!validator.isStrongPassword(newPassword, { minSymbols: 0 })) throw Error("Password is too weak.");
 
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(newPassword, salt);

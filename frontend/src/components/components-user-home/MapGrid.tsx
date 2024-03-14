@@ -2,8 +2,7 @@ import { Link } from "react-router-dom"
 import MapCard, { Variants } from "./Mapcard"
 import mapexample from '../../assets/mapexample.png'
 import { motion } from "framer-motion"
-import { useMapContext } from "../../hooks/useMapContext"
-
+import { useMapContext } from "../../hooks/map-hooks/useMapContext"
 
 export const MapGrid = () => {
 
@@ -17,7 +16,12 @@ export const MapGrid = () => {
     return (
         <div className="grid grid-cols-4 gap-6 mt-4">
             {maps.map(map =>
-                <MapCard key={map._id} variants={variants} name={map.name} description={map.description} id={map._id} />)}
+                <MapCard
+                    key={map._id}
+                    variants={variants}
+                    name={map.name}
+                    description={map.description}
+                    id={map._id} />)}
             <Link to='/createmap' state={null}>
                 <motion.div
                     variants={variants}

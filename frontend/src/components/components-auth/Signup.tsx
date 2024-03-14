@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 import { ErrorMssg } from "../components-misc/ErrorAndSuccess"
 import VisibilityIcon from "../components-misc/VisibilityIcon"
-import { useSignup } from "../../hooks/useSignup"
+import { useSignup } from "../../hooks/user-hooks/useSignup"
 
 const Signup = () => {
 

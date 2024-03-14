@@ -1,8 +1,8 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import { FormEvent, useState } from 'react';
-import { useAuthContext } from '../../../hooks/useAuthContext';
+import { useAuthContext } from '../../../hooks/user-hooks/useAuthContext';
 import { ErrorMssg } from '../../components-misc/ErrorAndSuccess';
-import useUpdateUser from '../../../hooks/useUpdateUser';
+import useUpdateUser from '../../../hooks/user-hooks/useUpdateUser';
 
 type ComponentProps = {
     setOpen: React.Dispatch<React.SetStateAction<boolean>>,

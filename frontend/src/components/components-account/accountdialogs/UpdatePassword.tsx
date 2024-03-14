@@ -1,7 +1,7 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import { FormEvent, useState } from 'react';
 import VisibilityIcon from '../../components-misc/VisibilityIcon';
-import useUpdateUser from '../../../hooks/useUpdateUser';
+import useUpdateUser from '../../../hooks/user-hooks/useUpdateUser';
 import { ErrorMssg } from '../../components-misc/ErrorAndSuccess';
 
 type ComponentProps = {

@@ -10,8 +10,8 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 
 // hooks
-import { useAuthContext } from '../../hooks/useAuthContext';
-import { useLogout } from '../../hooks/useLogout';
+import { useAuthContext } from '../../hooks/user-hooks/useAuthContext';
+import { useLogout } from '../../hooks/user-hooks/useLogout';
 import DeleteDropDown from './DeleteDropDown';
 import AccountPicture from './AccountPicture';
 

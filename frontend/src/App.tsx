@@ -8,9 +8,9 @@ import Signup from "./components/components-auth/Signup"
 import Login from "./components/components-auth/Login"
 import Home from "./components/components-front-page/Home"
 import Account from "./components/components-account/Account"
-import UserHome from './components/components-protected/UserHome'
-import CreateNewMap from './components/components-protected/CreateNewMap'
-import { useAuthContext } from './hooks/useAuthContext'
+import UserHome from './components/components-user-home/UserHome'
+import CreateNewMap from './components/components-edit-create-map/CreateEditMap'
+import { useAuthContext } from './hooks/user-hooks/useAuthContext'
 import { MapContextProvider } from './contexts/MapContext'
 
 function App() {
