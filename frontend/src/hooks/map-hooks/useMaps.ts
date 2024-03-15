@@ -8,9 +8,21 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 export const useMaps = () => {
 
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const { mapDispatch } = useMapContext();
 
+    const setLoadingAndError = () => {
+        setError('')
+        setIsLoading(true)
+    }
+
+    const resetLoadingAndError = () => {
+        setError('')
+        setIsLoading(false)
+    }
+
     const getMaps = async (user: User) => {
+        setLoadingAndError();
         if (!user) return;
         const response =
             await fetch(`${BASE_URL}/map/user_maps/${user._id}`, {
@@ -20,6 +32,7 @@ export const useMaps = () => {
         if (!response.ok) {
             setError(mapData.mssg)
         } else {
+            resetLoadingAndError();
             mapDispatch({ type: MapActionType.SET_MAPS, payload: mapData });
         }
     }
@@ -85,5 +98,5 @@ export const useMaps = () => {
         }
     }
 
-    return { getMaps, deleteMap, createMap, updateMap, duplicateMap, error }
+    return { getMaps, deleteMap, createMap, updateMap, duplicateMap, error, isLoading }
 }

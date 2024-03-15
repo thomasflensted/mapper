@@ -17,7 +17,7 @@ const UserHome = () => {
     const { maps } = useMapContext();
     const { error, getMaps } = useMaps();
 
-    const containerAnimation = { before: {}, after: { transition: { duration: .2, staggerChildren: .05 } } }
+    const containerAnimation = { before: {}, after: { transition: { duration: .2, staggerChildren: .1 } } }
 
     useEffect(() => {
         const fetchMaps = async () => await getMaps(user);
