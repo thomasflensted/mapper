@@ -1,6 +1,6 @@
-import { Places } from "./types/placeTypes"
-import { Map } from "./types/mapTypes"
-export const places: Places = [
+import { Places } from "../../types/placeTypes"
+import { Map } from "../../types/mapTypes"
+export const examplePlaces: Places = [
     {
         _id: '1',
         name: 'Via Carota',

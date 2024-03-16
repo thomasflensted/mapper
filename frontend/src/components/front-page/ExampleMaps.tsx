@@ -1,5 +1,5 @@
 import MapCardMock from "./MapCardMock"
-import { maps } from "../../exampleData"
+import { maps } from "./exampleData"
 
 const ExampleMaps = () => {
 

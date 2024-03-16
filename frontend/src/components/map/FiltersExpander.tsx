@@ -48,7 +48,7 @@ const FiltersExpander = ({ setFilter }: ExpanderProps) => {
         <motion.div variants={animation} animate={isExpanded ? "open" : "closed"} initial={false}
             onMouseEnter={() => setIsExpanded(true)}
             onMouseLeave={() => setIsExpanded(false)}
-            className="absolute border z-10 flex items-center gap-5 p-[12px] overflow-hidden bg-white rounded-full shadow-lg top-2 left-2 justfify-left">
+            className="absolute border flex items-center gap-5 p-[12px] overflow-hidden bg-white rounded-full shadow-lg top-2 left-2 justfify-left">
             <DoubleArrowRightIcon className="flex-shrink-0 w-3" />
             {filterElements.map(filterElement =>
                 <div key={filterElement.name} className='flex'>

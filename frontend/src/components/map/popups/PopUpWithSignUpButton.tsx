@@ -29,5 +29,3 @@ const PopUpWithSignUpButton = ({ lat, lng, setShowPopUp }: PopUpProps) => {
 }
 
 export default PopUpWithSignUpButton
-
-//<button onClick={() => setShowPopUp(false)} className="py-1 font-medium text-gray-600 border rounded hover:bg-gray-50">Close</button>

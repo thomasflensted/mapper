@@ -15,7 +15,7 @@ PlaceSchema.statics.createPlace = async function (placeObj) {
 
     // check if name is present and gps coordinates are valid
     const { name, coordinates } = placeObj;
-    if (!name) throw Error("Fields with an asterisk must be filled out.")
+    if (!name) throw Error("The name field must be filled out.")
     if (!coordinates || coordinates.length !== 2) throw Error("Invalid GPS coordinates.");
 
     // create place and return it and a message

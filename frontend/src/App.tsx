@@ -10,6 +10,7 @@ import Home from "./components/front-page/Home"
 import Account from "./components/account/Account"
 import UserHome from './components/user-front-page/UserHome'
 import CreateNewMap from './components/edit-create-map/CreateEditMap'
+import CreateEditPlace from './components/edit-create-place/CreateEditPlace'
 import UserMapView from './components/map-view/UserMapView'
 
 // context and hooks
@@ -33,9 +34,12 @@ function App() {
                 <Route path='/login' element={!user ? <Login /> : <Navigate to='/' />} />
                 <Route path='/signup' element={!user ? <Signup /> : <Navigate to='/' />} />
                 <Route path='/account' element={user ? <Account /> : <Navigate to='/' />} />
-                <Route path='/createmap' element={user ? <CreateNewMap /> : <Navigate to='/' />} />
-                <Route path='/editmap' element={user ? <CreateNewMap /> : <Navigate to='/' />} />
+                <Route path='/map/create' element={user ? <CreateNewMap /> : <Navigate to='/' />} />
+                <Route path='/map/edit/:map_id' element={user ? <CreateNewMap /> : <Navigate to='/' />} />
                 <Route path='/map/:map_id' element={user ? <UserMapView /> : <Navigate to='/' />} />
+                <Route path='/place/create/:map_id' element={user ? <CreateEditPlace /> : <Navigate to='/' />} />
+                <Route path='/map/:map_id/place/:place_id' element={user ? <CreateEditPlace /> : <Navigate to='/' />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </PlaceContextProvider>
           </MapContextProvider>

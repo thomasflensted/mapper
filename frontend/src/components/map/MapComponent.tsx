@@ -4,22 +4,26 @@ import { Place, Places } from "../../types/placeTypes";
 import { View } from '../../types/mapTypes';
 import mapboxgl from 'mapbox-gl';
 import MarkerComponent from "./MarkerComponent";
-import PopUpWithSignUpButton from "./PopUpWithSignUpButton";
-import PopUpWithInfo from "./PopUpWithInfo";
+import PopUpWithSignUpButton from "./popups/PopUpWithSignUpButton";
+import PopUpWithInfo from "./popups/PopUpWithInfo";
+import { useAuthContext } from '../../hooks/user-hooks/useAuthContext';
+import PopUpWithAddNewButton from './popups/PopUpWithAddNewButton';
 const TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
 type MapView = { longitude: number, latitude: number, zoom: number };
 
 type MapComponentProps = {
     children: ReactNode,
-    places: Places,
-    setCurrentPlace: React.Dispatch<React.SetStateAction<Place | null>>,
+    filteredPlaces: Places,
     currentPlace: Place | null,
+    setCurrentPlace: React.Dispatch<React.SetStateAction<Place | null>>,
     view: View,
+    map_id: string
 }
 
-const MapComponent = ({ children, places, setCurrentPlace, currentPlace, view }: MapComponentProps) => {
+const MapComponent = ({ children, filteredPlaces, currentPlace, setCurrentPlace, view, map_id }: MapComponentProps) => {
 
+    const { user } = useAuthContext();
     const mapRef = useRef<any>(null);
     const [showMapPopup, setShowMapPopup] = useState(false);
     const [showMarkerPopup, setShowMarkerPopup] = useState(false);
@@ -27,11 +31,11 @@ const MapComponent = ({ children, places, setCurrentPlace, currentPlace, view }:
     const [currentPlaceIsVisible, setCurrentPlaceIsVisible] = useState<boolean>(true);
 
     useEffect(() => {
-        if (currentPlace) setCurrentPlaceIsVisible(places.includes(currentPlace));
-        if (view === 'list' && currentPlace) mapRef.current.flyTo({
+        if (currentPlace) setCurrentPlaceIsVisible(filteredPlaces.includes(currentPlace));
+        if (view === 'list' && currentPlaceIsVisible && currentPlace) mapRef.current.flyTo({
             center: [currentPlace.coordinates[0], currentPlace.coordinates[1]]
         })
-    }, [currentPlace, places])
+    }, [currentPlace, filteredPlaces])
 
     const handleMapClick = (e: mapboxgl.MapLayerMouseEvent) => {
         setCurrentPlace(null)
@@ -48,7 +52,6 @@ const MapComponent = ({ children, places, setCurrentPlace, currentPlace, view }:
     }
 
     const initialView: MapView = { longitude: 15, latitude: 20, zoom: 1.5 }
-
     return (
         <Map
             ref={mapRef}
@@ -57,23 +60,29 @@ const MapComponent = ({ children, places, setCurrentPlace, currentPlace, view }:
             mapboxAccessToken={TOKEN}
             mapStyle="mapbox://styles/thomasflensted/clltb8sq500aq01qx45ve35k7"
             initialViewState={initialView}>
-            {places.map(place =>
+            {filteredPlaces.map(place =>
                 <MarkerComponent
                     key={place._id}
                     place={place}
                     handleClick={handleMarkerClick}
                     size={(currentPlace?.name === place.name && view === 'list') ? 'scale-125' : 'scale-100'} />)}
-            {showMapPopup && (
+            {showMapPopup && !user && (
                 <PopUpWithSignUpButton
                     lat={clickCoordinates.lat}
                     lng={clickCoordinates.lng}
                     setShowPopUp={setShowMapPopup} />)}
-            {showMarkerPopup && view == 'marker' && currentPlaceIsVisible && (
+            {showMapPopup && user && (
+                <PopUpWithAddNewButton
+                    map_id={map_id}
+                    lat={clickCoordinates.lat}
+                    lng={clickCoordinates.lng}
+                    setShowPopUp={setShowMapPopup} />)}
+            {showMarkerPopup && currentPlace && view == 'marker' && currentPlaceIsVisible && (
                 <PopUpWithInfo
                     place={currentPlace}
                     setShowPopUp={setShowMarkerPopup} />)}
             {children}
-        </Map >
+        </Map>
     )
 }
 

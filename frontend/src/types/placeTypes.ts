@@ -11,4 +11,14 @@ export type Place = {
     map_id: string
 }
 
-export type Places = Place[] | []
+export type NewPlace = {
+    name: string,
+    description: string,
+    coordinates: [number, number],
+    have_been: boolean,
+    type: PlaceType,
+    images: string[],
+    map_id: string,
+}
+
+export type Places = Place[];

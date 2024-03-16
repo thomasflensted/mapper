@@ -5,6 +5,6 @@ export type Map = {
     user_id: string
 }
 
-export type Maps = Map[] | [];
+export type Maps = Map[];
 
 export type View = 'list' | 'marker';

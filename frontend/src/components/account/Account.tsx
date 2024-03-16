@@ -4,7 +4,8 @@ import UpdateEmail from './accountdialogs/UpdateEmail';
 import UpdatePassword from './accountdialogs/UpdatePassword';
 import AccountRow from './AccountRow';
 import { ErrorMssg, SuccessMssg } from '../misc/ErrorAndSuccess';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowLeftIcon } from '@radix-ui/react-icons';
 
 // react
 import { useState } from 'react';
@@ -24,6 +25,7 @@ const Account = () => {
     const [passwordIsOpen, setPasswordIsOpen] = useState(false);
     const [deleteError, setDeleteError] = useState('')
     const [success, setSuccess] = useState('');
+    const navigate = useNavigate();
 
     // hooks
     const { user } = useAuthContext();
@@ -31,6 +33,8 @@ const Account = () => {
 
     return (
         <div className="relative flex px-12 flex-col border text-sm text-gray-500 gap-8 w-1/3 p-8 rounded-lg h-min shadow-[0_0_60px_0px_rgba(0,0,0,0.05)] animate-page-slide-up">
+
+            <ArrowLeftIcon className='absolute left-6 top-6 hover:cursor-pointer' onClick={() => navigate('/')} />
 
             <DeleteDropDown setError={setDeleteError} />
 

@@ -3,6 +3,7 @@ import ExampleMaps from "./ExampleMaps"
 import HeadingAndButton from "./HeadingAndButton"
 import TextBlock from "./TextBlock"
 import UpcomingFeatures from "./UpcomingFeatures"
+import { examplePlaces } from "./exampleData"
 
 const Home = () => {
 
@@ -11,7 +12,7 @@ const Home = () => {
             <HeadingAndButton heading="Remember The Places That Matter" btnText="Get Started For Free" showBtn={true} fontSize="text-4xl">
                 <p className="w-full text-sm font-medium leading-8 text-center text-blue-600">Create and explore your own maps.</p>
             </HeadingAndButton>
-            <MapContainer />
+            <MapContainer places={examplePlaces} />
             <TextBlock showFirst={true} />
             <ExampleMaps />
             <TextBlock showFirst={false} />

@@ -9,6 +9,7 @@ export const useMaps = () => {
 
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [mapData, setMapData] = useState<{ name: string, description: string } | null>(null);
     const { mapDispatch } = useMapContext();
 
     const setLoadingAndError = () => {
@@ -19,6 +20,22 @@ export const useMaps = () => {
     const resetLoadingAndError = () => {
         setError('')
         setIsLoading(false)
+    }
+
+    const getSingleMap = async (user: User, map_id: string) => {
+        setLoadingAndError();
+        if (!user) return;
+        const response =
+            await fetch(`${BASE_URL}/map/${map_id}`, {
+                headers: { 'Authorization': `Bearer ${user.token}` }
+            });
+        const mapData = await response.json();
+        if (!response.ok) {
+            setError(mapData.mssg)
+        } else {
+            setMapData(mapData);
+            resetLoadingAndError();
+        }
     }
 
     const getMaps = async (user: User) => {
@@ -98,5 +115,5 @@ export const useMaps = () => {
         }
     }
 
-    return { getMaps, deleteMap, createMap, updateMap, duplicateMap, error, isLoading }
+    return { getSingleMap, getMaps, deleteMap, createMap, updateMap, duplicateMap, mapData, error, isLoading }
 }
