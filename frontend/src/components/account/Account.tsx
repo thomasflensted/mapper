@@ -3,7 +3,7 @@ import UpdateName from './accountdialogs/UpdateName';
 import UpdateEmail from './accountdialogs/UpdateEmail';
 import UpdatePassword from './accountdialogs/UpdatePassword';
 import AccountRow from './AccountRow';
-import { ErrorMssg, SuccessMssg } from '../misc/ErrorAndSuccess';
+import { ErrorMssg, SuccessMssg } from '../global-misc-general/ErrorAndSuccess';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
 

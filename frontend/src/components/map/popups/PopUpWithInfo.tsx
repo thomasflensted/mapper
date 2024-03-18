@@ -3,7 +3,9 @@ import { IoMdClose } from "react-icons/io";
 import { Place } from "../../../types/placeTypes";
 import * as Dialog from '@radix-ui/react-dialog';
 import CreateEditPlace from "../../edit-create-place/CreateEditPlace";
-import { useRef, useState } from "react";
+import { useState, useContext } from "react";
+import { MapStateContext } from "../../../contexts/MapStateContext";
+import { MapStateActionType } from "../../../types/mapStateActions";
 
 type PopUpProps = {
     place: Place,
@@ -14,13 +16,17 @@ export const capitalizeFirstLetter = (txt: string) => { return txt.substring(0, 
 
 const PopUpWithInfo = ({ place, setShowPopUp }: PopUpProps) => {
 
-    const [open, setOpen] = useState(false);
-    //const style = { background: 'blue', position: 'relative', display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem', width: '60px' }
+    const { mapStateDispatch } = useContext(MapStateContext);
+    const [dialogIsOpen, setDialogIsOpen] = useState(false);
+
+    const handleAdjustMarkerLocation = () => {
+        mapStateDispatch({ type: MapStateActionType.SET_IS_ADJUSTING_MARKER, payload: true });
+    }
 
     return (
         <Popup
-            style={{ display: 'relative' }}
-            offset={14}
+            anchor="bottom"
+            offset={15}
             maxWidth='none'
             closeButton={false}
             focusAfterOpen={false}
@@ -35,8 +41,19 @@ const PopUpWithInfo = ({ place, setShowPopUp }: PopUpProps) => {
                 <hr className="border-[0.5px] border-gray-200 my-1" />
                 <p className="font-light text-gray-700">{place.description}</p>
                 <div className="flex justify-end gap-1 mt-2">
-                    <button className="px-3 py-0.5 btn-white">Edit</button>
-                    <button className="px-3 py-0.5 btn-white">Adjust Location</button>
+                    <Dialog.Root open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
+                        <Dialog.Trigger className="px-3 py-0.5 btn-white">Edit</Dialog.Trigger>
+                        <Dialog.Portal>
+                            <Dialog.Overlay className='fixed inset-0 bg-white opacity-50' />
+                            <CreateEditPlace
+                                map_id={place.map_id}
+                                coordinates={place.coordinates}
+                                place={place}
+                                setOpen={setDialogIsOpen}
+                                setShowPopUp={setShowPopUp} />
+                        </Dialog.Portal>
+                    </Dialog.Root>
+                    <button onClick={handleAdjustMarkerLocation} className="px-3 py-0.5 btn-white">Adjust Location</button>
                 </div>
             </div>
         </Popup >

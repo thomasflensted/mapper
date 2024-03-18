@@ -46,7 +46,7 @@ export const usePlaces = () => {
         return true;
     }
 
-    const updatePlace = async (user: User, place_id: string, updatedProps: { name?: string, description?: string, type?: PlaceType }) => {
+    const updatePlace = async (user: User, place_id: string, updatedProps: { name?: string, description?: string, type?: PlaceType, coordinates?: [number, number] }) => {
 
         if (!user) return;
         const response =

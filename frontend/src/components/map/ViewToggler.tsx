@@ -1,10 +1,15 @@
 import { motion } from "framer-motion"
-import { View } from "../../types/mapTypes";
+import { MapStateActionType } from "../../types/mapStateActions";
+import { useMapStateContext } from "../../hooks/map-state/useMapStateContext";
 
-const ViewToggler = ({ view, setView }: { view: View, setView: React.Dispatch<React.SetStateAction<View>> }) => {
+const ViewToggler = () => {
+
+    const { view, mapStateDispatch } = useMapStateContext();
 
     const handleViewChange = () => {
-        view === 'marker' ? setView('list') : setView('marker');
+        view === 'marker'
+            ? mapStateDispatch({ type: MapStateActionType.SET_VIEW, payload: 'list' })
+            : mapStateDispatch({ type: MapStateActionType.SET_VIEW, payload: 'marker' })
     }
 
     return (

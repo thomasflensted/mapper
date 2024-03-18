@@ -1,7 +1,7 @@
 import { Link, useLocation, useParams } from "react-router-dom"
 import { usePlaceContext } from "../../hooks/place-hooks/usePlaceContext";
 import { usePlaces } from "../../hooks/place-hooks/usePlaces";
-import { ErrorMssg } from "../misc/ErrorAndSuccess";
+import { ErrorMssg } from "../global-misc-general/ErrorAndSuccess";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "../../hooks/user-hooks/useAuthContext";
 import MapContainer from "../map/MapContainer";

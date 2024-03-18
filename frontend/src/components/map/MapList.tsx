@@ -1,16 +1,13 @@
 import { motion } from "framer-motion";
 import { Place, Places } from "../../types/placeTypes";
-import { View } from "../../types/mapTypes";
 import { capitalizeFirstLetter } from "./popups/PopUpWithInfo";
+import { MapStateActionType } from "../../types/mapStateActions";
+import { useMapStateContext } from "../../hooks/map-state/useMapStateContext";
 
-type MapListProps = {
-    filteredPlaces: Places,
-    currentPlace: Place | null,
-    setCurrentPlace: React.Dispatch<React.SetStateAction<Place | null>>,
-    view: View,
-}
 
-const MapListContainer = ({ filteredPlaces, currentPlace, setCurrentPlace, view }: MapListProps) => {
+const MapListContainer = ({ filteredPlaces }: { filteredPlaces: Places }) => {
+
+    const { currentPlace, view, mapStateDispatch } = useMapStateContext();
 
     const listAnimation = { visible: { x: 0 }, hidden: { x: 340 } };
     const transition = { ease: 'easeInOut', duration: .5 };
@@ -21,6 +18,10 @@ const MapListContainer = ({ filteredPlaces, currentPlace, setCurrentPlace, view 
         if (selectedPlaceTop) listContainer?.scroll({ left: 0, top: selectedPlaceTop - 15, behavior: 'smooth' });
     }
 
+    const handleSetPlace = (place: Place) => {
+        mapStateDispatch({ type: MapStateActionType.SET_CURRENT_PLACE, payload: place })
+    }
+
     return (
         <motion.div
             initial={false} variants={listAnimation} animate={view === 'list' ? "visible" : "hidden"} transition={transition} id='container'
@@ -28,7 +29,7 @@ const MapListContainer = ({ filteredPlaces, currentPlace, setCurrentPlace, view 
             {filteredPlaces.map((place: Place) =>
                 <div
                     key={place._id}
-                    onClick={() => setCurrentPlace(place)}
+                    onClick={() => handleSetPlace(place)}
                     className={`w-full p-4 mb-4 bg-white rounded shadow-sm ${currentPlace?._id === place._id ? 'border border-blue-600' : 'border'}`} id={place._id}>
                     <h3 className="text-sm font-bold text-blue-600">{place.name}</h3>
                     <p className="text-xs font-light text-gray-400">{capitalizeFirstLetter(place.type)}</p>

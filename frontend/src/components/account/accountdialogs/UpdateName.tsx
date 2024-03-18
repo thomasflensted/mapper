@@ -1,7 +1,7 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import { FormEvent, useState } from 'react';
 import { useAuthContext } from '../../../hooks/user-hooks/useAuthContext';
-import { ErrorMssg } from '../../misc/ErrorAndSuccess';
+import { ErrorMssg } from '../../global-misc-general/ErrorAndSuccess';
 import useUpdateUser from '../../../hooks/user-hooks/useUpdateUser';
 
 type ComponentProps = {

@@ -51,6 +51,8 @@ const getUsersMaps = async (req, res) => {
 const updateSingleMap = async (req, res) => {
     const _id = req.params.map_id;
     try {
+        const { name } = req.body;
+        if (!name) throw Error("Map name is required.")
         const response = await Map.updateOne({ _id }, { ...req.body });
         res.status(200).json({ mssg: `Updated ${response.modifiedCount} documents.` });
     } catch (err) {

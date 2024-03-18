@@ -1,6 +1,6 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
-import DeleteWarning from '../misc/DeleteWarning';
+import DeleteWarning from '../global-misc-general/DeleteWarning';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import useUpdateUser from '../../hooks/user-hooks/useUpdateUser';
 

@@ -2,8 +2,8 @@ import { NewPlace, Place, PlaceType } from "../../types/placeTypes";
 import { useEffect, useState } from "react";
 import { usePlaces } from "../../hooks/place-hooks/usePlaces";
 import { useAuthContext } from "../../hooks/user-hooks/useAuthContext";
-import { LabelAndInput } from "../misc/CreateEditComponents"
-import { ErrorMssg } from "../misc/ErrorAndSuccess";
+import { LabelAndInput } from "../global-misc-general/FormComponents"
+import { ErrorMssg } from "../global-misc-general/ErrorAndSuccess";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import TypeDropDown from "./TypeDropDown";
 import HaveBeenToggle from "./HaveBeenToggle";
@@ -59,12 +59,12 @@ const CreateEditPlace = ({ map_id, setOpen, place, coordinates, setShowPopUp }: 
     }, [name, description, type])
 
     return (
-        <Dialog.Content className='fixed w-1/3 translate-x-1/2 bg-white border rounded-lg shadow-lg top-1/4 right-1/2'>
+        <Dialog.Content className='fixed w-1/3 translate-x-1/2 bg-white border rounded-lg shadow-lg top-36 right-1/2'>
             <div className="relative w-full h-full p-6">
                 <Dialog.Title className="mb-3 text-lg font-bold text-blue-600">{place ? 'Edit Place' : 'Create New Place'}</Dialog.Title>
                 <form className="flex flex-col gap-4" id="newplaceform" onSubmit={(e) => handleSubmit(e)}>
                     <LabelAndInput heading='Name' value={name} setter={setName} maxLength={30} optional={false} />
-                    <LabelAndInput heading='Description' value={description} setter={setDescription} maxLength={100} optional={true} />
+                    <LabelAndInput heading='Description' value={description} setter={setDescription} maxLength={0} optional={true} />
                     <TypeDropDown setType={setType} type={type} />
                     <HaveBeenToggle setHaveBeen={setHaveBeen} haveBeen={haveBeen} />
                     <div className="flex gap-2">
@@ -74,7 +74,7 @@ const CreateEditPlace = ({ map_id, setOpen, place, coordinates, setShowPopUp }: 
                         <button type="submit" form="newplaceform" disabled={!hasChanged} onClick={(e) => handleSubmit(e)}
                             className="w-full text-sm font-medium btn-blue disabled:bg-blue-300">{place ? 'Save' : 'Create Place'}</button>
                     </div>
-                    {error && <ErrorMssg mssg={error} />}
+                    {error && <ErrorMssg mssg={error} marginBottom={5} />}
                 </form>
                 <Dialog.Close>
                     <Cross2Icon className="absolute top-4 right-4" />

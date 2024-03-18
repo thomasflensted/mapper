@@ -1,9 +1,9 @@
 import * as Dialog from '@radix-ui/react-dialog';
-import VisibilityIcon from '../../misc/VisibilityIcon';
+import VisibilityIcon from '../../global-misc-general/VisibilityIcon';
 import { FormEvent, useState } from 'react';
 import { useAuthContext } from '../../../hooks/user-hooks/useAuthContext';
 import useUpdateUser from '../../../hooks/user-hooks/useUpdateUser';
-import { ErrorMssg } from '../../misc/ErrorAndSuccess';
+import { ErrorMssg } from '../../global-misc-general/ErrorAndSuccess';
 
 type ComponentProps = {
     setOpen: React.Dispatch<React.SetStateAction<boolean>>,

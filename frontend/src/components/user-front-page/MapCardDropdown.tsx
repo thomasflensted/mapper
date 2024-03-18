@@ -1,6 +1,6 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
-import DeleteWarning from '../misc/DeleteWarning';
+import DeleteWarning from '../global-misc-general/DeleteWarning';
 import { Link } from 'react-router-dom';
 import { useMaps } from '../../hooks/map-hooks/useMaps';
 import { useAuthContext } from '../../hooks/user-hooks/useAuthContext';

@@ -16,20 +16,12 @@ export const MapGrid = () => {
     return (
         <div className="grid grid-cols-4 gap-6 mt-4">
             {maps.map(map =>
-                <Link
-                    to={`/map/${map._id}`}
-                    state={{ mapName: map.name, mapDescription: map.description }}
-                    key={map._id}>
-                    <MapCard
-                        variants={variants}
-                        name={map.name}
-                        description={map.description}
-                        id={map._id}
-                    />
+                <Link to={`/map/${map._id}`} key={map._id}>
+                    <MapCard variants={variants} name={map.name} description={map.description} id={map._id} />
                 </Link>
             )
             }
-            <Link to='/map/create' state={{ mapName: '', mapDescription: '' }}>
+            <Link to='/map/create'>
                 <motion.div
                     variants={variants}
                     className="flex flex-col w-56 h-56 p-2 border shadow-md rounded-xl">

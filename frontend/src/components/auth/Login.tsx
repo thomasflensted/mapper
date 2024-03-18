@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
-import { ErrorMssg } from "../misc/ErrorAndSuccess"
+import { ErrorMssg } from "../global-misc-general/ErrorAndSuccess"
 import { useState } from "react"
-import VisibilityIcon from "../misc/VisibilityIcon"
+import VisibilityIcon from "../global-misc-general/VisibilityIcon"
 import { useLogin } from "../../hooks/user-hooks/useLogin"
 
 const Login = () => {
@@ -31,7 +31,7 @@ const Login = () => {
                 </div>
                 <button form="login" className="btn-blue">Log In</button>
             </form>
-            {loginError && <ErrorMssg mssg={loginError} />}
+            {loginError && <ErrorMssg mssg={loginError} marginBottom={2} />}
             <Link to='/signup' className="text-xs underline ">New User? Sign Up Here.</Link>
         </div>
     )
