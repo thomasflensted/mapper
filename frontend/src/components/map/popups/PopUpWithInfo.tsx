@@ -6,6 +6,8 @@ import CreateEditPlace from "../../edit-create-place/CreateEditPlace";
 import { useState, useContext } from "react";
 import { MapStateContext } from "../../../contexts/MapStateContext";
 import { MapStateActionType } from "../../../types/mapStateActions";
+import { useAuthContext } from "../../../hooks/user-hooks/useAuthContext";
+import { Link } from "react-router-dom";
 
 type PopUpProps = {
     place: Place,
@@ -18,6 +20,7 @@ const PopUpWithInfo = ({ place, setShowPopUp }: PopUpProps) => {
 
     const { mapStateDispatch } = useContext(MapStateContext);
     const [dialogIsOpen, setDialogIsOpen] = useState(false);
+    const { user } = useAuthContext();
 
     const handleAdjustMarkerLocation = () => {
         mapStateDispatch({ type: MapStateActionType.SET_IS_ADJUSTING_MARKER, payload: true });
@@ -40,7 +43,7 @@ const PopUpWithInfo = ({ place, setShowPopUp }: PopUpProps) => {
                 </div>
                 <hr className="border-[0.5px] border-gray-200 my-1" />
                 <p className="font-light text-gray-700">{place.description}</p>
-                <div className="flex justify-end gap-1 mt-2">
+                {user && <div className="flex justify-end gap-1 mt-2">
                     <Dialog.Root open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
                         <Dialog.Trigger className="px-3 py-0.5 btn-white">Edit</Dialog.Trigger>
                         <Dialog.Portal>
@@ -54,9 +57,15 @@ const PopUpWithInfo = ({ place, setShowPopUp }: PopUpProps) => {
                         </Dialog.Portal>
                     </Dialog.Root>
                     <button onClick={handleAdjustMarkerLocation} className="px-3 py-0.5 btn-white">Adjust Location</button>
-                </div>
+                </div>}
+                {!user &&
+                    <div className="flex w-full mt-2">
+                        <Link className="px-3 py-0.5 btn-white w-full text-center" to='/signup'>
+                            Sign Up To Get Started
+                        </Link>
+                    </div>}
             </div>
-        </Popup >
+        </Popup>
     )
 }
 

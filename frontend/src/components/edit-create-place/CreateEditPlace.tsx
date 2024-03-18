@@ -1,5 +1,5 @@
 import { NewPlace, Place, PlaceType } from "../../types/placeTypes";
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { usePlaces } from "../../hooks/place-hooks/usePlaces";
 import { useAuthContext } from "../../hooks/user-hooks/useAuthContext";
 import { LabelAndInput } from "../global-misc-general/FormComponents"
@@ -14,10 +14,12 @@ type DialogProps = {
     setOpen: React.Dispatch<React.SetStateAction<boolean>>,
     place?: Place,
     coordinates: [number, number],
-    setShowPopUp: React.Dispatch<React.SetStateAction<boolean>>,
+    setShowPopUp?: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-const CreateEditPlace = ({ map_id, setOpen, place, coordinates, setShowPopUp }: DialogProps) => {
+const CreateEditPlace = forwardRef(function (props: DialogProps, ref: any) {
+
+    const { map_id, setOpen, place, coordinates, setShowPopUp } = props;
 
     // hooks
     const { user } = useAuthContext();
@@ -42,7 +44,7 @@ const CreateEditPlace = ({ map_id, setOpen, place, coordinates, setShowPopUp }: 
         } else {
             const newPlace: NewPlace = { name, description, coordinates, have_been: false, type, images: [], map_id }
             result = await createPlace(user, newPlace);
-            if (result) setShowPopUp(false);
+            if (result && setShowPopUp) setShowPopUp(false);
         }
         if (result) setOpen(false);
     }
@@ -58,8 +60,12 @@ const CreateEditPlace = ({ map_id, setOpen, place, coordinates, setShowPopUp }: 
         else setHasChanged(true);
     }, [name, description, type])
 
+    const handleClose = () => {
+        if (setShowPopUp) setShowPopUp(false);
+    }
+
     return (
-        <Dialog.Content className='fixed w-1/3 translate-x-1/2 bg-white border rounded-lg shadow-lg top-36 right-1/2'>
+        <Dialog.Content ref={ref} className='fixed z-20 w-1/3 translate-x-1/2 bg-white border rounded-lg shadow-lg top-36 right-1/2'>
             <div className="relative w-full h-full p-6">
                 <Dialog.Title className="mb-3 text-lg font-bold text-blue-600">{place ? 'Edit Place' : 'Create New Place'}</Dialog.Title>
                 <form className="flex flex-col gap-4" id="newplaceform" onSubmit={(e) => handleSubmit(e)}>
@@ -70,7 +76,7 @@ const CreateEditPlace = ({ map_id, setOpen, place, coordinates, setShowPopUp }: 
                     <div className="flex gap-2">
                         {place && <button type="button" onClick={handleDelete}
                             className="w-full text-sm font-medium text-center btn-red">Delete Place</button>}
-                        <Dialog.Close onClick={() => setShowPopUp(false)} className="w-full text-sm font-medium btn-white">Cancel</Dialog.Close>
+                        <Dialog.Close onClick={handleClose} className="w-full text-sm font-medium btn-white">Cancel</Dialog.Close>
                         <button type="submit" form="newplaceform" disabled={!hasChanged} onClick={(e) => handleSubmit(e)}
                             className="w-full text-sm font-medium btn-blue disabled:bg-blue-300">{place ? 'Save' : 'Create Place'}</button>
                     </div>
@@ -79,9 +85,9 @@ const CreateEditPlace = ({ map_id, setOpen, place, coordinates, setShowPopUp }: 
                 <Dialog.Close>
                     <Cross2Icon className="absolute top-4 right-4" />
                 </Dialog.Close>
-            </div>
-        </Dialog.Content>
+            </div >
+        </Dialog.Content >
     )
-}
+})
 
 export default CreateEditPlace

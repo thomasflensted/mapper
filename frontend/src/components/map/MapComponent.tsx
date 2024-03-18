@@ -1,5 +1,5 @@
 import { Map } from 'react-map-gl';
-import { ReactNode, useState, useRef, useEffect } from "react";
+import { ReactNode, useState, useRef, useEffect, useMemo } from "react";
 import { Place, Places } from "../../types/placeTypes";
 import mapboxgl from 'mapbox-gl';
 import MarkerComponent from "./MarkerComponent";
@@ -21,9 +21,10 @@ type MapComponentProps = {
 
 const MapComponent = ({ children, filteredPlaces, map_id }: MapComponentProps) => {
 
+    const mapRef = useRef<any>(null);
     const { user } = useAuthContext();
     const { currentPlace, view, isAdjustingMarker, mapStateDispatch } = useMapStateContext();
-    const mapRef = useRef<any>(null);
+
     const [showMapPopup, setShowMapPopup] = useState(false);
     const [showMarkerPopup, setShowMarkerPopup] = useState(false);
     const [clickCoordinates, setClickCoordinates] = useState<{ lng: number, lat: number }>({ lng: 0, lat: 0 })
@@ -38,10 +39,12 @@ const MapComponent = ({ children, filteredPlaces, map_id }: MapComponentProps) =
     }, [currentPlace, filteredPlaces, isAdjustingMarker])
 
     const handleMapClick = (e: mapboxgl.MapLayerMouseEvent) => {
-        mapStateDispatch({ type: MapStateActionType.SET_CURRENT_PLACE, payload: null })
-        setClickCoordinates(e.lngLat)
-        setShowMarkerPopup(false)
-        setShowMapPopup(showMapPopup ? false : true);
+        if (!isAdjustingMarker) {
+            mapStateDispatch({ type: MapStateActionType.SET_CURRENT_PLACE, payload: null })
+            setClickCoordinates(e.lngLat)
+            setShowMarkerPopup(false)
+            setShowMapPopup(showMapPopup ? false : true);
+        }
     }
 
     const handleMarkerClick = (e: any, place: Place) => {
@@ -50,6 +53,14 @@ const MapComponent = ({ children, filteredPlaces, map_id }: MapComponentProps) =
         setShowMapPopup(false);
         setShowMarkerPopup(true)
     }
+
+    const Markers = useMemo(() => filteredPlaces.map(place => (
+        <MarkerComponent
+            key={place._id}
+            place={place}
+            handleClick={handleMarkerClick}
+            size={(currentPlace?.name === place.name && view === 'list') ? 'scale-125' : 'scale-100'} />
+    )), [filteredPlaces])
 
     const initialView: MapView = { longitude: 15, latitude: 20, zoom: 1.5 }
     return (
@@ -61,12 +72,7 @@ const MapComponent = ({ children, filteredPlaces, map_id }: MapComponentProps) =
             mapStyle="mapbox://styles/thomasflensted/clltb8sq500aq01qx45ve35k7"
             initialViewState={initialView}>
 
-            {filteredPlaces.map(place =>
-                <MarkerComponent
-                    key={place._id}
-                    place={place}
-                    handleClick={handleMarkerClick}
-                    size={(currentPlace?.name === place.name && view === 'list') ? 'scale-125' : 'scale-100'} />)}
+            {Markers}
 
             {showMapPopup && !user && (
                 <PopUpWithSignUpButton
@@ -74,7 +80,7 @@ const MapComponent = ({ children, filteredPlaces, map_id }: MapComponentProps) =
                     lng={clickCoordinates.lng}
                     setShowPopUp={setShowMapPopup} />)}
 
-            {showMapPopup && user && (
+            {showMapPopup && user && !isAdjustingMarker && (
                 <PopUpWithAddNewButton
                     map_id={map_id}
                     lat={clickCoordinates.lat}

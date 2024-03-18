@@ -2,7 +2,7 @@ import { IoMdClose } from 'react-icons/io';
 import { Popup } from 'react-map-gl';
 import * as Dialog from '@radix-ui/react-dialog';
 import CreateEditPlace from '../../edit-create-place/CreateEditPlace';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 
 type PopUpProps = {
     lat: number,
@@ -38,16 +38,8 @@ const PopUpWithAddNewButton = ({ lat, lng, map_id, setShowPopUp }: PopUpProps) =
                     </Dialog.Portal>
                 </Dialog.Root>
             </div>
-        </Popup >
+        </Popup>
     )
 }
 
 export default PopUpWithAddNewButton
-
-/*
-<Link
-    state={{ lat, lng }}
-    to={`/place/create/${map_id}`}>
-    <button className="w-10/12 font-medium border-0 btn-blue">Create Place</button>
-</Link>
-*/
