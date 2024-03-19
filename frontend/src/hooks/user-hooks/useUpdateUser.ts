@@ -6,6 +6,7 @@ const handleResponse = async (response: Response, setUpdateError: React.Dispatch
 
     const json = await response.json();
     if (!response.ok) {
+        console.log(json);
         setUpdateError(json.message);
         return null;
     } else {
@@ -34,6 +35,7 @@ export const useUpdateUser = () => {
             authDispatch({ type: "LOGIN", payload: result })
             return "Account name was successfully updated."
         }
+        return null;
     }
 
     const updateEmail = async (newEmail: string, password: string) => {
@@ -51,6 +53,7 @@ export const useUpdateUser = () => {
             authDispatch({ type: "LOGIN", payload: result })
             return "Account email was successfully updated."
         }
+        return null;
     }
 
     const updatePassword = async (oldPassword: string, newPassword: string, newPasswordRepeat: string) => {
@@ -73,6 +76,7 @@ export const useUpdateUser = () => {
             authDispatch({ type: "LOGIN", payload: result })
             return "Account password was successfully updated."
         }
+        return null;
     }
 
     const deleteUser = async () => {
@@ -87,7 +91,6 @@ export const useUpdateUser = () => {
             authDispatch({ type: 'LOGOUT', payload: null });
             return { success: true, mssg: "Account was successfully deleted" }
         }
-
     }
 
     return { updateUserName, updateEmail, updatePassword, deleteUser, updateError, setUpdateError }

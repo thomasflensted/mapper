@@ -1,6 +1,6 @@
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import mapexample from '/Users/thomasflensted/Documents/03 PROJECTS/mapper/frontend/src/assets/mapexample.png'
+import images from '../../assets/index'
 import MapCardDropdown from './MapCardDropdown';
 import { motion } from "framer-motion"
 
@@ -16,9 +16,14 @@ type MapCardProps = {
     id: string
 }
 
+export const chooseRandomImage = () => {
+    return images[Math.floor(Math.random() * (images.length))];
+}
+
 const MapCard = ({ variants, name, description, id }: MapCardProps) => {
 
     const mapData = { name, description, id };
+    const image = chooseRandomImage();
 
     return (
         <motion.div
@@ -30,7 +35,7 @@ const MapCard = ({ variants, name, description, id }: MapCardProps) => {
                 </DropdownMenu.Trigger>
                 <MapCardDropdown mapData={mapData} />
             </DropdownMenu.Root>
-            <img className='rounded-lg' src={mapexample} alt="" />
+            <img className='rounded-lg' src={image} alt="" />
             <div className='flex flex-col justify-center h-full text-center'>
                 <h1 className='mb-1 text-sm font-bold text-blue-600 '>{name}</h1>
                 <p className='px-4 text-xs text-blue-500'>{description}</p>

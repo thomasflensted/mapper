@@ -15,10 +15,10 @@ const ViewToggler = () => {
     return (
         <motion.div
             initial={false}
-            animate={view === 'marker' ? { x: 0 } : { x: -345 }}
+            animate={view === 'marker' ? { x: 0, y: 0 } : { x: -345, y: -45 }}
             transition={{ ease: 'easeInOut', duration: .5 }}
             onClick={(handleViewChange)}
-            className="absolute flex items-center w-auto gap-2 px-4 py-2 bg-white rounded-full shadow-md cursor-pointer h-7 justify-evenly top-2 right-2">
+            className="absolute flex items-center w-auto gap-2 px-4 py-2 bg-white rounded-full shadow-md cursor-pointer h-7 justify-evenly top-14 right-2">
             <h4 className={`text-xs text-blue-600 ${view === 'list' ? 'font-medium' : 'font-light'}`}>List</h4>
             <div className="box-border relative w-10 h-5 bg-gray-100 border rounded-full">
                 <motion.div

@@ -1,8 +1,11 @@
+// components
 import * as Dialog from '@radix-ui/react-dialog';
-import { FormEvent, useState } from 'react';
-import VisibilityIcon from '../../global-misc-general/VisibilityIcon';
-import useUpdateUser from '../../../hooks/user-hooks/useUpdateUser';
 import { ErrorMssg } from '../../global-misc-general/ErrorAndSuccess';
+
+// hooks and others
+import { FormEvent, useState } from 'react';
+import useUpdateUser from '../../../hooks/user-hooks/useUpdateUser';
+import { DialogButtons, PasswordInput } from '../../global-misc-general/FormComponents';
 
 type ComponentProps = {
     setOpen: React.Dispatch<React.SetStateAction<boolean>>,
@@ -42,27 +45,16 @@ const UpdatePassword = ({ setOpen, setSuccess }: ComponentProps) => {
             <Dialog.Overlay className='fixed inset-0 bg-black opacity-60' />
             <Dialog.Content onInteractOutside={reset} onEscapeKeyDown={reset} className='fixed flex flex-col w-1/4 gap-4 p-6 -translate-x-1/2 -translate-y-1/2 bg-white border rounded animate-fade-in top-1/3 left-1/2'>
                 <Dialog.Title className='font-bold text-blue-600'>Update Password</Dialog.Title>
-                <form id='pwform' onSubmit={(e) => handleSubmit(e)}>
-                    <div className='relative mb-4'>
-                        <label className='mr-1 text-xs text-gray-600'>New Password</label>
-                        <input className="text-input" type={newIsVisible ? 'text' : 'password'} onChange={(e) => setNewPassword(e.target.value)} />
-                        <VisibilityIcon visible={newIsVisible} change={setNewIsVisible} />
-                    </div>
-                    <div className='relative mb-4'>
-                        <label className='mr-1 text-xs text-gray-600'>Repeat New Password</label>
-                        <input className="text-input" type={newIsVisible ? 'text' : 'password'} onChange={(e) => setNewPasswordRepeat(e.target.value)} />
-                        <VisibilityIcon visible={newIsVisible} change={setNewIsVisible} />
-                    </div>
-                    <div className='relative mb-4'>
-                        <label className='mr-1 text-xs text-gray-600'>Old Password</label>
-                        <input className="text-input" type={passwordIsVisible ? 'text' : 'password'} onChange={(e) => setOldPassword(e.target.value)} />
-                        <VisibilityIcon visible={passwordIsVisible} change={setPasswordIsVisible} />
-                    </div>
+
+                <form id='pwform' onSubmit={(e) => handleSubmit(e)} className='flex flex-col gap-2'>
+
+                    <PasswordInput heading='New Password' setText={setNewPassword} isVisible={newIsVisible} setVisibility={setNewIsVisible} />
+                    <PasswordInput heading='Repeat New Password' setText={setNewPasswordRepeat} isVisible={newIsVisible} setVisibility={setNewIsVisible} />
+                    <PasswordInput heading='Old Password' setText={setOldPassword} isVisible={passwordIsVisible} setVisibility={setPasswordIsVisible} />
+                    <DialogButtons resetFunction={reset} />
+
                 </form>
-                <div className='flex gap-2'>
-                    <Dialog.Close onClick={reset} className='w-full py-2 border rounded hover:bg-gray-50'>Cancel</Dialog.Close>
-                    <button form='pwform' className='w-full py-2 text-white bg-blue-500 border rounded hover:bg-blue-600'>Update</button>
-                </div>
+
                 {updateError && <ErrorMssg mssg={updateError} />}
             </Dialog.Content>
         </Dialog.Portal>

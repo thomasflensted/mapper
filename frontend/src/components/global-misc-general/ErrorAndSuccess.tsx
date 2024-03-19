@@ -1,4 +1,4 @@
-export function ErrorMssg({ mssg, marginBottom }: { mssg: string, marginBottom: number }) {
+export function ErrorMssg({ mssg, marginBottom }: { mssg: string, marginBottom?: number }) {
 
     const margin = `mb-${marginBottom}`
 
@@ -9,7 +9,7 @@ export function ErrorMssg({ mssg, marginBottom }: { mssg: string, marginBottom: 
     )
 }
 
-export function SuccessMssg({ mssg, marginBottom }: { mssg: string, marginBottom: number }) {
+export function SuccessMssg({ mssg, marginBottom }: { mssg: string, marginBottom?: number }) {
 
     const margin = `mb-${marginBottom}`
 

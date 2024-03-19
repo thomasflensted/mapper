@@ -1,4 +1,4 @@
-import { Map } from 'react-map-gl';
+import Map, { GeolocateControl, useControl } from 'react-map-gl';
 import { ReactNode, useState, useRef, useEffect, useMemo } from "react";
 import { Place, Places } from "../../types/placeTypes";
 import mapboxgl from 'mapbox-gl';
@@ -9,6 +9,7 @@ import { useAuthContext } from '../../hooks/user-hooks/useAuthContext';
 import PopUpWithAddNewButton from './popups/PopUpWithAddNewButton';
 import { MapStateActionType } from '../../types/mapStateActions';
 import { useMapStateContext } from '../../hooks/map-state/useMapStateContext';
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 const TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
 type MapView = { longitude: number, latitude: number, zoom: number };
@@ -21,10 +22,9 @@ type MapComponentProps = {
 
 const MapComponent = ({ children, filteredPlaces, map_id }: MapComponentProps) => {
 
-    const mapRef = useRef<any>(null);
+    const mapRef: any = useRef();
     const { user } = useAuthContext();
     const { currentPlace, view, isAdjustingMarker, mapStateDispatch } = useMapStateContext();
-
     const [showMapPopup, setShowMapPopup] = useState(false);
     const [showMarkerPopup, setShowMarkerPopup] = useState(false);
     const [clickCoordinates, setClickCoordinates] = useState<{ lng: number, lat: number }>({ lng: 0, lat: 0 })
@@ -33,8 +33,8 @@ const MapComponent = ({ children, filteredPlaces, map_id }: MapComponentProps) =
     useEffect(() => {
         if (isAdjustingMarker) { setShowMarkerPopup(false) } else { setShowMarkerPopup(true) }
         if (currentPlace) setCurrentPlaceIsVisible(filteredPlaces.includes(currentPlace));
-        if (view === 'list' && currentPlaceIsVisible && currentPlace) mapRef.current.flyTo({
-            center: [currentPlace.coordinates[0], currentPlace.coordinates[1]]
+        if (view === 'list' && currentPlaceIsVisible && currentPlace) mapRef.current?.flyTo({
+            center: [currentPlace.coordinates[0], currentPlace.coordinates[1]], zoom: 6
         })
     }, [currentPlace, filteredPlaces, isAdjustingMarker])
 
@@ -54,6 +54,24 @@ const MapComponent = ({ children, filteredPlaces, map_id }: MapComponentProps) =
         setShowMarkerPopup(true)
     }
 
+    const zoomToBoundingBox = () => {
+        const allCoords = filteredPlaces.map(place => place.coordinates);
+        const allX = allCoords.map(coords => coords[0])
+        const allY = allCoords.map(coords => coords[1])
+        mapRef?.current?.fitBounds([
+            [Math.min(...allX), Math.min(...allY)], [Math.max(...allX), Math.max(...allY)]], { padding: 200, duration: 3000 })
+    }
+
+    const GeoCoder = () => {
+        useControl(() => new MapboxGeocoder({
+            accessToken: TOKEN,
+            marker: false,
+            clearOnBlur: true,
+            clearAndBlurOnEsc: true
+        }));
+        return null;
+    }
+
     const Markers = useMemo(() => filteredPlaces.map(place => (
         <MarkerComponent
             key={place._id}
@@ -65,13 +83,19 @@ const MapComponent = ({ children, filteredPlaces, map_id }: MapComponentProps) =
     const initialView: MapView = { longitude: 15, latitude: 20, zoom: 1.5 }
     return (
         <Map
+            reuseMaps={true}
+            onLoad={zoomToBoundingBox}
             ref={mapRef}
             onZoom={() => setShowMapPopup(false)}
             onClick={(e) => handleMapClick(e)}
             mapboxAccessToken={TOKEN}
             mapStyle="mapbox://styles/thomasflensted/clltb8sq500aq01qx45ve35k7"
-            initialViewState={initialView}>
+            initialViewState={initialView}
+            attributionControl={false}>
 
+            <GeoCoder />
+
+            <GeolocateControl position='bottom-right' />
             {Markers}
 
             {showMapPopup && !user && (
