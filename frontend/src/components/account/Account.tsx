@@ -3,18 +3,16 @@ import UpdateName from './accountdialogs/UpdateName';
 import UpdateEmail from './accountdialogs/UpdateEmail';
 import UpdatePassword from './accountdialogs/UpdatePassword';
 import AccountRow from './AccountRow';
+import DeleteDropDown from './DeleteDropDown';
+import AccountPicture from './AccountPicture';
 import { ErrorMssg, SuccessMssg } from '../global-misc-general/ErrorAndSuccess';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
 
-// react
-import { useState } from 'react';
-
 // hooks
 import { useAuthContext } from '../../hooks/user-hooks/useAuthContext';
 import { useLogout } from '../../hooks/user-hooks/useLogout';
-import DeleteDropDown from './DeleteDropDown';
-import AccountPicture from './AccountPicture';
+import { useState } from 'react';
 
 
 const Account = () => {

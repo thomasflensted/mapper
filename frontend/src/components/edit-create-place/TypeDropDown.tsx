@@ -13,6 +13,7 @@ const TypeDropDown = ({ type, setType }: { type: string, setType: React.Dispatch
                 <option value="sight">Sight</option>
                 <option value="museum">Museum</option>
                 <option value="memory">Memory</option>
+                <option className="hidden" value="memory">Other</option>
             </select>
         </div>
     )

@@ -7,9 +7,10 @@ type LabelAndInputProps = {
     value: string
     setter: React.Dispatch<string>
     optional: boolean,
+    type?: string
 }
 
-export const LabelAndInput = ({ heading, value, setter, optional }: LabelAndInputProps) => {
+export const LabelAndInput = ({ heading, value, setter, optional, type }: LabelAndInputProps) => {
 
     return (
         <div className="relative">
@@ -19,7 +20,7 @@ export const LabelAndInput = ({ heading, value, setter, optional }: LabelAndInpu
                 value={value}
                 onChange={(e) => setter(e.target.value)}
                 className="text-input"
-                type="text" />
+                type={type ? type : 'text'} />
         </div>
     )
 }
@@ -34,15 +35,15 @@ type LongInputProps = {
 
 export const LongInput = ({ heading, value, maxLength, setter }: LongInputProps) => {
     return (
-        <>
-            <label className="mr-1 text-xs text-gray-600">{heading}</label>
+        <div className="relative">
+            <label className="text-xs text-gray-600">{heading}</label>
             <textarea
                 value={value}
+                rows={2}
                 maxLength={maxLength}
                 onChange={(e) => setter(e.target.value)}
-                className="text-input" />
-            <span className="absolute top-[62px] right-[0px] text-gray-300 text-[10px]">{`${value.length}/${maxLength}`}</span>
-        </>
+                className="mb-2 resize-none text-input" />
+        </div>
     )
 }
 
@@ -67,11 +68,10 @@ export const PasswordInput = ({ heading, setText, isVisible, setVisibility }: Pa
 }
 
 type FormButtonsProps = {
-    hasChanged?: boolean,
     textButtonTwo: string
 }
 
-export const FormButtons = ({ hasChanged, textButtonTwo }: FormButtonsProps) => {
+export const FormButtons = ({ textButtonTwo }: FormButtonsProps) => {
 
     const navigate = useNavigate();
 
@@ -83,7 +83,6 @@ export const FormButtons = ({ hasChanged, textButtonTwo }: FormButtonsProps) => 
                 Cancel
             </div>
             <button
-                disabled={hasChanged ? !hasChanged : false}
                 form="newmapform"
                 className="w-full btn-blue disabled:bg-blue-300 ">
                 {textButtonTwo}

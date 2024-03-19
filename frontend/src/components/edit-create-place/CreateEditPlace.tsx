@@ -69,13 +69,13 @@ const CreateEditPlace = forwardRef(function (props: DialogProps, ref: any) {
             <div className="relative w-full h-full p-6">
                 <Dialog.Title className="mb-3 text-lg font-bold text-blue-600">{place ? 'Edit Place' : 'Create New Place'}</Dialog.Title>
                 <form className="flex flex-col gap-4" id="newplaceform" onSubmit={(e) => handleSubmit(e)}>
-                    <LabelAndInput heading='Name' value={name} setter={setName} maxLength={30} optional={false} />
-                    <LabelAndInput heading='Description' value={description} setter={setDescription} maxLength={0} optional={true} />
+                    <LabelAndInput heading='Name' value={name} setter={setName} optional={false} />
+                    <LabelAndInput heading='Description' value={description} setter={setDescription} optional={true} />
                     <TypeDropDown setType={setType} type={type} />
                     <HaveBeenToggle setHaveBeen={setHaveBeen} haveBeen={haveBeen} />
                     <div className="flex gap-2">
-                        {place && <button type="button" onClick={handleDelete}
-                            className="w-full text-sm font-medium text-center btn-red">Delete Place</button>}
+                        {place &&
+                            <button type="button" onClick={handleDelete} className="w-full text-sm font-medium text-center btn-red">Delete Place</button>}
                         <Dialog.Close onClick={handleClose} className="w-full text-sm font-medium btn-white">Cancel</Dialog.Close>
                         <button type="submit" form="newplaceform" disabled={!hasChanged} onClick={(e) => handleSubmit(e)}
                             className="w-full text-sm font-medium btn-blue disabled:bg-blue-300">{place ? 'Save' : 'Create Place'}</button>
