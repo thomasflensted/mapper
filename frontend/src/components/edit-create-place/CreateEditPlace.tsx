@@ -8,6 +8,8 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import TypeDropDown from "./TypeDropDown";
 import HaveBeenToggle from "./HaveBeenToggle";
 import * as Dialog from '@radix-ui/react-dialog';
+import { usePlaceContext } from "../../hooks/place-hooks/usePlaceContext";
+import { PlaceActionType } from "../../types/placeActions";
 
 type DialogProps = {
     map_id: string,
@@ -24,6 +26,7 @@ const CreateEditPlace = forwardRef(function (props: DialogProps, ref: any) {
     // hooks
     const { user } = useAuthContext();
     const { error, createPlace, updatePlace, deletePlace } = usePlaces();
+    const { placeDispatch } = usePlaceContext();
 
     // state
     const [name, setName] = useState<string>(place ? place.name : '');
@@ -41,6 +44,7 @@ const CreateEditPlace = forwardRef(function (props: DialogProps, ref: any) {
         let result: boolean | undefined;
         if (place) {
             result = await updatePlace(user, place._id, { name, description, type })
+            if (result) placeDispatch({ type: PlaceActionType.UPDATE_PLACE, payload: { id: place._id, updatedProps: { name, description, type } } });
         } else {
             const newPlace: NewPlace = { name, description, coordinates, have_been: false, type, images: [], map_id }
             result = await createPlace(user, newPlace);

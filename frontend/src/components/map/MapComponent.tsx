@@ -1,18 +1,26 @@
-import Map, { GeolocateControl, useControl } from 'react-map-gl';
+// hooks, context and react
 import { ReactNode, useState, useRef, useEffect, useMemo } from "react";
-import { Place, Places } from "../../types/placeTypes";
-import mapboxgl from 'mapbox-gl';
-import MarkerComponent from "./MarkerComponent";
-import PopUpWithSignUpButton from "./popups/PopUpWithSignUpButton";
-import PopUpWithInfo from "./popups/PopUpWithInfo";
 import { useAuthContext } from '../../hooks/user-hooks/useAuthContext';
-import PopUpWithAddNewButton from './popups/PopUpWithAddNewButton';
-import { MapStateActionType } from '../../types/mapStateActions';
 import { useMapStateContext } from '../../hooks/map-state/useMapStateContext';
-import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
-const TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
+import { usePlaces } from "../../hooks/place-hooks/usePlaces";
 
-type MapView = { longitude: number, latitude: number, zoom: number };
+// components
+import MarkerComponent from "./markers-and-popups/MarkerComponent";
+import PopUpWithSignUpButton from "./markers-and-popups/PopUpWithSignUpButton";
+import PopUpWithInfo from "./markers-and-popups/PopUpWithInfo";
+import PopUpWithAddNewButton from './markers-and-popups/PopUpWithAddNewButton';
+import GeoCoder from "./GeoCoder";
+
+// react map gl / mapbox
+import Map, { GeolocateControl } from 'react-map-gl';
+import mapboxgl from 'mapbox-gl';
+const TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
+const STYLE = import.meta.env.VITE_MAP_STYLE;
+
+// types
+import { Place, Places } from "../../types/placeTypes";
+import { MapStateActionType } from '../../types/mapStateActions';
+import AdjustButtons from "./AdjustButtons";
 
 type MapComponentProps = {
     children: ReactNode,
@@ -22,105 +30,107 @@ type MapComponentProps = {
 
 const MapComponent = ({ children, filteredPlaces, map_id }: MapComponentProps) => {
 
-    const mapRef: any = useRef();
+    const mapRef = useRef<any>();
     const { user } = useAuthContext();
     const { currentPlace, view, isAdjustingMarker, mapStateDispatch } = useMapStateContext();
+    const { updatePlace } = usePlaces();
     const [showMapPopup, setShowMapPopup] = useState(false);
     const [showMarkerPopup, setShowMarkerPopup] = useState(false);
     const [clickCoordinates, setClickCoordinates] = useState<{ lng: number, lat: number }>({ lng: 0, lat: 0 })
-    const [currentPlaceIsVisible, setCurrentPlaceIsVisible] = useState<boolean>(true);
+    const [updatedCoords, setUpdatedCoords] = useState<{ lng: number, lat: number }>({ lng: 0, lat: 0 });
 
+    // fly to place if outside of visible map
     useEffect(() => {
-        if (isAdjustingMarker) { setShowMarkerPopup(false) } else { setShowMarkerPopup(true) }
-        if (currentPlace) setCurrentPlaceIsVisible(filteredPlaces.includes(currentPlace));
-        if (view === 'list' && currentPlaceIsVisible && currentPlace) mapRef.current?.flyTo({
-            center: [currentPlace.coordinates[0], currentPlace.coordinates[1]], zoom: 6
-        })
-    }, [currentPlace, filteredPlaces, isAdjustingMarker])
+        if (currentPlace && !mapRef.current.getBounds().contains(currentPlace.coordinates)) {
+            mapRef.current.flyTo({ center: [currentPlace?.coordinates[0], currentPlace?.coordinates[1]] })
+        }
+    }, [currentPlace])
+
+    // if new filter is added and selected place is not included, set place to null
+    useEffect(() => {
+        if (!filteredPlaces.find(place => place._id === currentPlace?._id)) {
+            setShowMarkerPopup(false);
+            mapStateDispatch({ type: MapStateActionType.SET_CURRENT_PLACE, payload: null })
+        }
+    }, [filteredPlaces])
+
+    const handleUpdateMarkerPosition = async (cancelled: boolean) => {
+        if (!currentPlace) return;
+        setShowMarkerPopup(false);
+        if (!cancelled) await updatePlace(user, currentPlace?._id, { coordinates: [updatedCoords.lng, updatedCoords.lat] });
+        mapStateDispatch({ type: MapStateActionType.SET_IS_ADJUSTING_MARKER, payload: false });
+    }
 
     const handleMapClick = (e: mapboxgl.MapLayerMouseEvent) => {
-        if (!isAdjustingMarker) {
-            mapStateDispatch({ type: MapStateActionType.SET_CURRENT_PLACE, payload: null })
-            setClickCoordinates(e.lngLat)
-            setShowMarkerPopup(false)
-            setShowMapPopup(showMapPopup ? false : true);
-        }
+        if (isAdjustingMarker) return;
+        mapStateDispatch({ type: MapStateActionType.SET_CURRENT_PLACE, payload: null })
+        setClickCoordinates(e.lngLat)
+        setShowMapPopup(showMapPopup || currentPlace ? false : true);
     }
 
-    const handleMarkerClick = (e: any, place: Place) => {
+    const handleMarkerClick = (e: mapboxgl.MapLayerMouseEvent, place: Place) => {
+        setShowMapPopup(false);
+        if (isAdjustingMarker) return;
         e.originalEvent.stopImmediatePropagation();
         mapStateDispatch({ type: MapStateActionType.SET_CURRENT_PLACE, payload: place })
-        setShowMapPopup(false);
         setShowMarkerPopup(true)
-    }
-
-    const zoomToBoundingBox = () => {
-        const allCoords = filteredPlaces.map(place => place.coordinates);
-        const allX = allCoords.map(coords => coords[0])
-        const allY = allCoords.map(coords => coords[1])
-        mapRef?.current?.fitBounds([
-            [Math.min(...allX), Math.min(...allY)], [Math.max(...allX), Math.max(...allY)]], { padding: 200, duration: 3000 })
-    }
-
-    const GeoCoder = () => {
-        useControl(() => new MapboxGeocoder({
-            accessToken: TOKEN,
-            marker: false,
-            clearOnBlur: true,
-            clearAndBlurOnEsc: true
-        }));
-        return null;
     }
 
     const Markers = useMemo(() => filteredPlaces.map(place => (
         <MarkerComponent
             key={place._id}
             place={place}
-            handleClick={handleMarkerClick}
-            size={(currentPlace?.name === place.name && view === 'list') ? 'scale-125' : 'scale-100'} />
+            setUpdatedCoords={setUpdatedCoords}
+            handleClick={handleMarkerClick} />
     )), [filteredPlaces])
 
-    const initialView: MapView = { longitude: 15, latitude: 20, zoom: 1.5 }
     return (
         <Map
             reuseMaps={true}
-            onLoad={zoomToBoundingBox}
             ref={mapRef}
-            onZoom={() => setShowMapPopup(false)}
             onClick={(e) => handleMapClick(e)}
             mapboxAccessToken={TOKEN}
-            mapStyle="mapbox://styles/thomasflensted/clltb8sq500aq01qx45ve35k7"
-            initialViewState={initialView}
+            mapStyle={STYLE}
+            initialViewState={{ longitude: 15, latitude: 20, zoom: 1.5 }}
             attributionControl={false}>
 
-            <GeoCoder />
+            {/* search bar */}
+            {!isAdjustingMarker && <GeoCoder />}
 
-            <GeolocateControl position='bottom-right' />
+            {/* control to get users location */}
+            {!isAdjustingMarker && <GeolocateControl position='bottom-right' />}
+
+            {/* markers, memoized above to avoid unnecessary rendering */}
             {Markers}
 
-            {showMapPopup && !user && (
-                <PopUpWithSignUpButton
-                    lat={clickCoordinates.lat}
-                    lng={clickCoordinates.lng}
-                    setShowPopUp={setShowMapPopup} />)}
-
-            {showMapPopup && user && !isAdjustingMarker && (
+            {/* Pop up with button to add new place on clicked location */}
+            {showMapPopup && user && (
                 <PopUpWithAddNewButton
                     map_id={map_id}
                     lat={clickCoordinates.lat}
                     lng={clickCoordinates.lng}
                     setShowPopUp={setShowMapPopup} />)}
 
-            {showMarkerPopup && currentPlace && view == 'marker' && currentPlaceIsVisible && !isAdjustingMarker && (
+            {/* popup with info about current place */}
+            {showMarkerPopup && currentPlace && view == 'marker' && !isAdjustingMarker && (
                 <PopUpWithInfo
                     place={currentPlace}
                     setShowPopUp={setShowMarkerPopup} />)}
 
+            {/* children, all ui is cleared while user repositions marker */}
             {!isAdjustingMarker && children}
 
+            {/* UI that shows when user repositions marker */}
             {isAdjustingMarker &&
-                <button onClick={() => mapStateDispatch({ type: MapStateActionType.SET_IS_ADJUSTING_MARKER, payload: false })}
-                    className='absolute px-4 font-bold border-none top-4 left-4 btn-blue'>Save Location</button>}
+                <AdjustButtons handleUpdateMarkerPosition={handleUpdateMarkerPosition} />}
+
+
+            {/* popup that only shows if user is not logged in */}
+            {showMapPopup && !user && (
+                <PopUpWithSignUpButton
+                    lat={clickCoordinates.lat}
+                    lng={clickCoordinates.lng}
+                    setShowPopUp={setShowMapPopup} />)}
 
         </Map >
     )

@@ -36,9 +36,9 @@ const MapCard = ({ variants, name, description, id }: MapCardProps) => {
                 <MapCardDropdown mapData={mapData} />
             </DropdownMenu.Root>
             <img className='rounded-lg' src={image} alt="" />
-            <div className='flex flex-col justify-center h-full text-center'>
-                <h1 className='mb-1 text-sm font-bold text-blue-600 '>{name}</h1>
-                <p className='px-4 text-xs text-blue-500'>{description}</p>
+            <div className='flex flex-col justify-center h-full overflow-hidden text-center'>
+                <h1 className='px-2 mb-1 overflow-hidden text-sm font-bold text-blue-600 text-ellipsis whitespace-nowrap'>{name}</h1>
+                <p className='px-2 overflow-hidden text-xs text-blue-500 whitespace-pre-line text-ellipsis'>{description}</p>
             </div>
         </motion.div>
     )

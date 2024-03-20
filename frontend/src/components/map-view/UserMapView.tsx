@@ -1,8 +1,8 @@
-import { Link, useLocation, useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { usePlaceContext } from "../../hooks/place-hooks/usePlaceContext";
 import { usePlaces } from "../../hooks/place-hooks/usePlaces";
 import { ErrorMssg } from "../global-misc-general/ErrorAndSuccess";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuthContext } from "../../hooks/user-hooks/useAuthContext";
 import MapContainer from "../map/MapContainer";
 import { FaArrowLeftLong } from "react-icons/fa6";
@@ -18,7 +18,6 @@ const UserMapView = () => {
     const { error, getPlaces } = usePlaces();
     const { user } = useAuthContext();
     const { placeDispatch } = usePlaceContext();
-    //const [mapData, setMapData] = useState<{ name: string, description: string }>({ name: '', description: '' })
 
     useEffect(() => {
         const fetchMapData = async () => { if (map_id) await getSingleMap(user, map_id) }

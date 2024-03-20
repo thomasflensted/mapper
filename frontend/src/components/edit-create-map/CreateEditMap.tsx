@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ErrorMssg } from "../global-misc-general/ErrorAndSuccess";
 import { useAuthContext } from "../../hooks/user-hooks/useAuthContext";
@@ -12,11 +12,11 @@ const CreateNewMap = () => {
     // hooks
     const { error, createMap, updateMap } = useMaps();
     const { user } = useAuthContext();
+    const { map_id } = useParams();
+    const { maps } = useMapContext();
     const navigate = useNavigate();
 
     // state
-    const { map_id } = useParams();
-    const { maps } = useMapContext();
     const thisMap = maps.find(map => map._id === map_id);
     const [name, setName] = useState(thisMap ? thisMap.name : '');
     const [description, setDescription] = useState(thisMap ? thisMap.description : '');
@@ -38,7 +38,7 @@ const CreateNewMap = () => {
             <h2 className="mb-3 text-lg font-bold text-blue-600">{thisMap ? "Edit Map" : "Create New Map"}</h2>
             <form id="newmapform" onSubmit={(e) => handleSubmit(e)} className="flex flex-col gap-4">
                 <LabelAndInput heading="Name" value={name} setter={setName} optional={false} />
-                <LongInput heading="Description" value={description} setter={setDescription} maxLength={50} optional={true} />
+                <LongInput heading="Description" maxLength={50} value={description} setter={setDescription} optional={true} />
                 <FormButtons textButtonTwo={thisMap ? "Save" : "Create Map"} />
                 {error && <ErrorMssg mssg={error} marginBottom={2} />}
             </form>

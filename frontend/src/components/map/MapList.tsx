@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Place, Places } from "../../types/placeTypes";
-import { capitalizeFirstLetter } from "./popups/PopUpWithInfo";
+import { capitalizeFirstLetter } from "./markers-and-popups/PopUpWithInfo";
 import { MapStateActionType } from "../../types/mapStateActions";
 import { useMapStateContext } from "../../hooks/map-state/useMapStateContext";
 import * as Dialog from '@radix-ui/react-dialog'

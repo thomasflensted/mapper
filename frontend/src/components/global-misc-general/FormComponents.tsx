@@ -30,10 +30,10 @@ type LongInputProps = {
     value: string
     setter: React.Dispatch<string>
     optional: boolean,
-    maxLength: number,
+    maxLength: number
 }
 
-export const LongInput = ({ heading, value, maxLength, setter }: LongInputProps) => {
+export const LongInput = ({ heading, value, setter, maxLength }: LongInputProps) => {
     return (
         <div className="relative">
             <label className="text-xs text-gray-600">{heading}</label>
@@ -43,6 +43,7 @@ export const LongInput = ({ heading, value, maxLength, setter }: LongInputProps)
                 maxLength={maxLength}
                 onChange={(e) => setter(e.target.value)}
                 className="mb-2 resize-none text-input" />
+            <span className="absolute right-0 text-[10px] text-gray-300 -bottom-2">{`${value.length}/${maxLength}`}</span>
         </div>
     )
 }
