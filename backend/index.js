@@ -14,10 +14,6 @@ app.use('/api/user', userRoutes)
 app.use('/api/map', mapRoutes)
 app.use('/api/place', placeRoutes)
 
-app.get('/', (req, res) => {
-    res.json({ mssg: "get" })
-})
-
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
         app.listen(process.env.PORT, () => {
