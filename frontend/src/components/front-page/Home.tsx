@@ -8,6 +8,7 @@ import { examplePlaces } from "./exampleData"
 import { useMapStateContext } from "../../hooks/map-state/useMapStateContext"
 import { MapStateActionType } from "../../types/mapStateActions"
 
+
 const Home = () => {
 
     const { mapStateDispatch } = useMapStateContext();
