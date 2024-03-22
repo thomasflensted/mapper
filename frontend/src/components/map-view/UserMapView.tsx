@@ -29,7 +29,7 @@ const UserMapView = () => {
     }, [])
 
     return (
-        <div className="relative flex flex-col items-center w-full gap-10">
+        <div className="relative flex flex-col items-center w-full gap-10 mb-20">
             <Link to='/'>
                 <motion.div
                     onClick={() => placeDispatch({ type: PlaceActionType.SET_PLACES, payload: [] })}

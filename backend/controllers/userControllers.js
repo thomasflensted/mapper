@@ -7,34 +7,6 @@ const createToken = (_id) => {
     return jwt.sign({ _id }, process.env.SECRET, { expiresIn: '3d' })
 }
 
-// list all user - only for development purposes
-const getAllUsers = async (req, res) => {
-    try {
-        const allUsers = await User.find({});
-        res.status(200).json(allUsers.length === 0 ? { mssg: "No users exist" } : allUsers);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
-    }
-}
-
-// get a single user by its id
-const getSingleUser = async (req, res) => {
-    const _id = req.params.user_id;
-    try {
-        const updatedUser = await User.findOne({ _id });
-        res.status(200).json({
-            _id: updatedUser._id,
-            email: updatedUser.email,
-            first_name: updatedUser.first_name,
-            last_name: updatedUser.last_name,
-            profile_picture: updatedUser.profile_picture,
-            token: updatedUser.token,
-        });
-    } catch (err) {
-        res.status(400).json({ message: err.message });
-    }
-}
-
 // update user's name or names
 const updateNames = async (req, res) => {
     const { email, first_name, last_name } = req.body;
@@ -150,8 +122,6 @@ const signUpUser = async (req, res) => {
 }
 
 module.exports = {
-    getAllUsers,
-    getSingleUser,
     updateNames,
     updateEmail,
     updatePassword,

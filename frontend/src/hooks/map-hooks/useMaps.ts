@@ -39,8 +39,8 @@ export const useMaps = () => {
     }
 
     const getMaps = async (user: User) => {
-        setLoadingAndError();
         if (!user) return;
+        const timer = setTimeout(() => setIsLoading(true), 350);
         const response =
             await fetch(`${BASE_URL}/map/user_maps/${user._id}`, {
                 headers: { 'Authorization': `Bearer ${user.token}` }
@@ -48,10 +48,12 @@ export const useMaps = () => {
         const mapData = await response.json();
         if (!response.ok) {
             setError(mapData.mssg)
+            setIsLoading(false)
         } else {
-            resetLoadingAndError();
             mapDispatch({ type: MapActionType.SET_MAPS, payload: mapData });
         }
+        clearTimeout(timer);
+        setIsLoading(false)
     }
 
     const deleteMap = async (user: User, map_id: string) => {

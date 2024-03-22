@@ -11,12 +11,6 @@ const {
     signUpUser
 } = require('../controllers/userControllers')
 
-// get all users - only for development purposes
-router.get('/', getAllUsers)
-
-// get single user - id in url params
-router.get('/:user_id/', getSingleUser);
-
 // update user's names - new names in request body
 router.patch('/updateNames', updateNames);
 

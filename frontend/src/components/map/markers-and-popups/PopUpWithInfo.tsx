@@ -38,15 +38,14 @@ const PopUpWithInfo = ({ place, setUpdatedPosition }: PopUpProps) => {
 
     return (
         <Popup
-            anchor="bottom"
             offset={15}
-            maxWidth='none'
+            style={{ maxWidth: '300px' }}
             closeButton={false}
             focusAfterOpen={false}
             key={place._id}
             longitude={place.coordinates[0]}
             latitude={place.coordinates[1]} >
-            <div className={`absolute bottom-0 px-4 pt-3 pb-4 -translate-x-1/2 bg-white rounded-md shadow-lg ${place.description.length > 100 ? 'w-72' : 'w-60'}`}>
+            <div className='px-2'>
                 <div className="flex items-center w-full">
                     <h2 className="flex-grow overflow-hidden font-medium text-blue-600 whitespace-nowrap text-ellipsis">{place.name}</h2>
                     <IoMdClose className="ml-3" onClick={handleClose} />

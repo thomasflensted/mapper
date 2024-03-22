@@ -1,6 +1,7 @@
 const Map = require('../models/MapModel')
 const User = require('../models/UserModel')
 const Place = require('../models/PlaceModel')
+const validator = require('validator')
 
 // create new map - properties in request body
 const createSingleMap = async (req, res) => {
@@ -38,6 +39,7 @@ const getSingleMap = async (req, res) => {
 const getUsersMaps = async (req, res) => {
     const user_id = req.params.user_id;
     try {
+        if (!validator.isMongoId(user_id)) throw Error('Invalid ID');
         const user = await User.findOne({ _id: user_id });
         if (!user) throw Error("User does not exist");
         const userMaps = await Map.find({ user_id });

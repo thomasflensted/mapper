@@ -14,7 +14,7 @@ const UserHome = () => {
 
     const { user } = useAuthContext();
     const { maps } = useMapContext();
-    const { error, getMaps } = useMaps();
+    const { error, isLoading, getMaps } = useMaps();
 
     const containerAnimation = { before: {}, after: { transition: { duration: .2, staggerChildren: .1 } } }
 
@@ -28,10 +28,13 @@ const UserHome = () => {
             variants={containerAnimation}
             animate='after' initial='before'
             className="flex flex-col items-center w-full gap-4 my-10">
-            <h2 className="text-4xl font-bold text-blue-700">Welcome {user?.first_name}</h2>
-            <p className="text-blue-500 font-md">{maps.length === 0 ? "Create Your First Map" : "Explore Your Maps"}</p>
-            {!error && <MapGrid />}
-            {error && <h2 className="font-bold text-red-500 text-md">{error}</h2>}
+            {!error && !isLoading && <>
+                <h2 className="text-4xl font-bold text-blue-700">Welcome {user?.first_name}</h2>
+                <p className="text-blue-500 font-md">{maps.length === 0 ? "Create Your First Map" : "Explore Your Maps"}</p>
+                <MapGrid />
+            </>}
+            {isLoading && <h2 className="text-lg font-semibold text-gray-500">Loading Maps...</h2>}
+            {error && <h2 className="font-bold text-red-500 text-md">{`There was an error: ${error}`}</h2>}
         </motion.div >
     )
 }
