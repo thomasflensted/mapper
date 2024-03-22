@@ -16,6 +16,7 @@ import UserMapView from './components/map-view/UserMapView'
 import { useAuthContext } from './hooks/user-hooks/useAuthContext'
 import { MapContextProvider } from './contexts/MapContext'
 import { PlaceContextProvider } from './contexts/PlaceContext'
+import { MapStateContextProvider } from './contexts/MapStateContext'
 
 function App() {
 
@@ -28,16 +29,18 @@ function App() {
         <main className="flex justify-center grow">
           <MapContextProvider>
             <PlaceContextProvider>
-              <Routes>
-                <Route path='/' element={user ? <UserHome /> : <Home />} />
-                <Route path='/login' element={!user ? <Login /> : <Navigate to='/' />} />
-                <Route path='/signup' element={!user ? <Signup /> : <Navigate to='/' />} />
-                <Route path='/account' element={user ? <Account /> : <Navigate to='/' />} />
-                <Route path='/map/create' element={user ? <CreateNewMap /> : <Navigate to='/' />} />
-                <Route path='/map/edit/:map_id' element={user ? <CreateNewMap /> : <Navigate to='/' />} />
-                <Route path='/map/:map_id' element={user ? <UserMapView /> : <Navigate to='/' />} />
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
+              <MapStateContextProvider>
+                <Routes>
+                  <Route path='/' element={user ? <UserHome /> : <Home />} />
+                  <Route path='/login' element={!user ? <Login /> : <Navigate to='/' />} />
+                  <Route path='/signup' element={!user ? <Signup /> : <Navigate to='/' />} />
+                  <Route path='/account' element={user ? <Account /> : <Navigate to='/' />} />
+                  <Route path='/map/create' element={user ? <CreateNewMap /> : <Navigate to='/' />} />
+                  <Route path='/map/edit/:map_id' element={user ? <CreateNewMap /> : <Navigate to='/' />} />
+                  <Route path='/map/:map_id' element={user ? <UserMapView /> : <Navigate to='/' />} />
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+              </MapStateContextProvider>
             </PlaceContextProvider>
           </MapContextProvider>
         </main>

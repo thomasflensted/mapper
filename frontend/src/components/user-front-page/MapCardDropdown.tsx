@@ -25,10 +25,10 @@ const MapCardDropdown = ({ mapData }: DropDownProps) => {
                 <Link to={`/map/edit/${mapData.id}`} state={{ mapName: mapData.name, mapDescription: mapData.description }}>
                     <DropdownMenu.Item className='px-2 py-1 text-sm font-medium text-blue-500 rounded cursor-pointer hover:outline-none focus:outline-none hover:bg-gray-100 focus:bg-gray-100'>Edit Map Details</DropdownMenu.Item>
                 </Link>
-                <DropdownMenu.Separator className='h-[.5px] bg-blue-500 my-2' />
+                <DropdownMenu.Separator className='hidden h-[.5px] bg-blue-500 my-2' />
                 <DropdownMenu.Item
                     onClick={handleDuplicateMap}
-                    className='px-2 py-1 text-sm font-medium text-blue-500 rounded cursor-pointer hover:outline-none focus:outline-none hover:bg-gray-100 focus:bg-gray-100'>Duplicate Map</DropdownMenu.Item>
+                    className='hidden px-2 py-1 text-sm font-medium text-blue-500 rounded cursor-pointer hover:outline-none focus:outline-none hover:bg-gray-100 focus:bg-gray-100'>Duplicate Map</DropdownMenu.Item>
                 <DropdownMenu.Separator className='h-[.5px] bg-blue-500 my-2' />
                 <AlertDialog.Root>
                     <DeleteWarning text={deleteText} btnText='Delete Map' deleteFunction={handleDeleteMap} />

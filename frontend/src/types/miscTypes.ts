@@ -1,6 +1,6 @@
 import { PlaceType } from './placeTypes'
 
-type FilterName = 'Cafés' | 'Restaurants' | 'Museums' | 'Nature' | 'Sights' | 'Hotels' | 'Memories';
+type FilterName = 'Cafés' | 'Restaurants' | 'Museums' | 'Nature' | 'Sights' | 'Hotels' | 'Memories' | 'Other';
 
 export type Filter = {
     name: FilterName,

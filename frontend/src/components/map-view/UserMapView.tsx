@@ -1,23 +1,25 @@
+// router and hooks
 import { Link, useParams } from "react-router-dom"
 import { usePlaceContext } from "../../hooks/place-hooks/usePlaceContext";
 import { usePlaces } from "../../hooks/place-hooks/usePlaces";
-import { ErrorMssg } from "../global-misc-general/ErrorAndSuccess";
 import { useEffect } from "react";
 import { useAuthContext } from "../../hooks/user-hooks/useAuthContext";
+import { useMaps } from "../../hooks/map-hooks/useMaps";
+
+// components
 import MapContainer from "../map/MapContainer";
+import { ErrorMssg } from "../global-misc-general/ErrorAndSuccess";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { PlaceActionType } from "../../types/placeActions";
-import { useMaps } from "../../hooks/map-hooks/useMaps";
 
 const UserMapView = () => {
 
     const { map_id } = useParams();
     const { getSingleMap, mapData } = useMaps();
-    const { places } = usePlaceContext();
+    const { places, placeDispatch } = usePlaceContext();
     const { error, getPlaces } = usePlaces();
     const { user } = useAuthContext();
-    const { placeDispatch } = usePlaceContext();
 
     useEffect(() => {
         const fetchMapData = async () => { if (map_id) await getSingleMap(user, map_id) }

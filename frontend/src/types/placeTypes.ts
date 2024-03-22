@@ -1,4 +1,4 @@
-export type PlaceType = 'cafe' | 'restaurant' | 'museum' | 'nature' | 'sight' | 'hotel' | 'memory';
+export type PlaceType = 'cafe' | 'restaurant' | 'museum' | 'nature' | 'sight' | 'hotel' | 'memory' | 'other';
 
 export type Place = {
     _id: string,

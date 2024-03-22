@@ -1,10 +1,10 @@
 import { View } from "./mapTypes"
 import { Place } from "./placeTypes"
 
-export enum MapStateActionType { SET_IS_ADJUSTING_MARKER, SET_VIEW, SET_CURRENT_PLACE };
+export enum MapStateActionType { SET_ADJUSTING, SET_VIEW, SET_PLACE, SET_POPUP };
 
-export interface SET_IS_ADJUSTING_MARKER {
-    type: MapStateActionType.SET_IS_ADJUSTING_MARKER,
+export interface SET_ADJUSTING {
+    type: MapStateActionType.SET_ADJUSTING,
     payload: boolean
 }
 
@@ -13,9 +13,14 @@ export interface SET_VIEW {
     payload: View
 }
 
-export interface SET_CURRENT_PLACE {
-    type: MapStateActionType.SET_CURRENT_PLACE,
+export interface SET_PLACE {
+    type: MapStateActionType.SET_PLACE,
     payload: Place | null
 }
 
-export type MapStateActions = SET_IS_ADJUSTING_MARKER | SET_VIEW | SET_CURRENT_PLACE;
+export interface SET_POPUP {
+    type: MapStateActionType.SET_POPUP,
+    payload: boolean,
+}
+
+export type MapStateActions = SET_ADJUSTING | SET_VIEW | SET_PLACE | SET_POPUP;

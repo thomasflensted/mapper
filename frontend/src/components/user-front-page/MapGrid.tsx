@@ -20,8 +20,7 @@ export const MapGrid = () => {
                 <Link to={`/map/${map._id}`} key={map._id}>
                     <MapCard variants={variants} name={map.name} description={map.description} id={map._id} />
                 </Link>
-            )
-            }
+            )}
             <Link to='/map/create'>
                 <motion.div
                     variants={variants}

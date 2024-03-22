@@ -13,6 +13,8 @@ import { ArrowLeftIcon } from '@radix-ui/react-icons';
 import { useAuthContext } from '../../hooks/user-hooks/useAuthContext';
 import { useLogout } from '../../hooks/user-hooks/useLogout';
 import { useState } from 'react';
+import { useMapContext } from '../../hooks/map-hooks/useMapContext';
+import { MapActionType } from '../../types/mapActions';
 
 
 const Account = () => {
@@ -26,8 +28,14 @@ const Account = () => {
     const navigate = useNavigate();
 
     // hooks
+    const { mapDispatch } = useMapContext();
     const { user } = useAuthContext();
     const { logout } = useLogout();
+
+    const handleLogout = async () => {
+        await logout();
+        mapDispatch({ type: MapActionType.SET_MAPS, payload: [] });
+    }
 
     return (
         <div className="relative flex px-12 flex-col border text-sm text-gray-500 gap-8 w-1/3 p-8 rounded-lg h-min shadow-[0_0_60px_0px_rgba(0,0,0,0.05)] animate-page-slide-up">
@@ -55,7 +63,7 @@ const Account = () => {
                     <Link className='w-full' to='/'>
                         <button className="w-full btn-blue">Go To Maps</button>
                     </Link>
-                    <button onClick={logout} className='w-full btn-red'>Log Out</button>
+                    <button onClick={handleLogout} className='w-full btn-red'>Log Out</button>
                 </div>
                 {success && <SuccessMssg mssg={success} />}
                 {deleteError && <ErrorMssg mssg={deleteError} />}

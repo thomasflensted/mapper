@@ -41,6 +41,7 @@ const getUsersMaps = async (req, res) => {
         const user = await User.findOne({ _id: user_id });
         if (!user) throw Error("User does not exist");
         const userMaps = await Map.find({ user_id });
+        if (!userMaps) throw Error("Something went wrong");
         res.status(200).json(userMaps);
     } catch (err) {
         res.status(400).json({ mssg: err.message });

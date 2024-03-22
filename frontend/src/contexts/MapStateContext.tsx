@@ -7,18 +7,21 @@ type MapState = {
     view: View,
     isAdjustingMarker: boolean,
     currentPlace: Place | null,
+    showPopup: boolean,
     mapStateDispatch: React.Dispatch<MapStateActions>
 }
 
 const mapStateReducer = (state: MapState, action: MapStateActions) => {
 
     switch (action.type) {
-        case (MapStateActionType.SET_CURRENT_PLACE):
+        case (MapStateActionType.SET_PLACE):
             return { ...state, currentPlace: action.payload }
-        case (MapStateActionType.SET_IS_ADJUSTING_MARKER):
+        case (MapStateActionType.SET_ADJUSTING):
             return { ...state, isAdjustingMarker: action.payload }
         case (MapStateActionType.SET_VIEW):
             return { ...state, view: action.payload }
+        case (MapStateActionType.SET_POPUP):
+            return { ...state, showPopup: action.payload }
         default:
             return state
     }
@@ -28,6 +31,7 @@ export const initialContext: MapState = {
     view: 'marker',
     isAdjustingMarker: false,
     currentPlace: null,
+    showPopup: false,
     mapStateDispatch: () => { }
 }
 

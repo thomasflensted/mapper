@@ -4,6 +4,10 @@ import images from '../../assets/index'
 import MapCardDropdown from './MapCardDropdown';
 import { motion } from "framer-motion"
 
+export const chooseRandomImage = () => {
+    return images[Math.floor(Math.random() * (images.length))];
+}
+
 export type Variants = {
     before: { opacity: number, y: number, scale: number },
     after: { opacity: number, y: number, scale: number }
@@ -14,10 +18,6 @@ type MapCardProps = {
     name: string,
     description: string,
     id: string
-}
-
-export const chooseRandomImage = () => {
-    return images[Math.floor(Math.random() * (images.length))];
 }
 
 const MapCard = ({ variants, name, description, id }: MapCardProps) => {

@@ -1,12 +1,11 @@
 // libraries and react
 import { motion } from "framer-motion"
-import { useEffect } from "react";
 
 // hooks / context / types
 import { useAuthContext } from "../../hooks/user-hooks/useAuthContext";
 import { useMapContext } from "../../hooks/map-hooks/useMapContext";
-
 import { useMaps } from "../../hooks/map-hooks/useMaps";
+import { useEffect } from "react";
 
 // components
 import { MapGrid } from "./MapGrid";

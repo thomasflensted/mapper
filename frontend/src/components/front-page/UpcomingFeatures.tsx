@@ -12,8 +12,16 @@ const UpcomingFeatures = () => {
                 <div className="w-full p-6 text-center border rounded-lg shadow-sm">
                     <h3 className="mb-1 text-sm font-semibold text-blue-600 whitespace-nowrap">Share Maps and Places</h3>
                 </div>
+            </div>
+            <div className="flex w-full gap-2">
                 <div className="w-full p-6 text-center border rounded-lg shadow-sm">
                     <h3 className="mb-1 text-sm font-semibold text-blue-600 whitespace-nowrap">Collaborate On Maps</h3>
+                </div>
+                <div className="w-full p-6 text-center border rounded-lg shadow-sm">
+                    <h3 className="mb-1 text-sm font-semibold text-blue-600 whitespace-nowrap">Auto-Zoom To Markers</h3>
+                </div>
+                <div className="w-full p-6 text-center border rounded-lg shadow-sm">
+                    <h3 className="mb-1 text-sm font-semibold text-blue-600 whitespace-nowrap">Duplicate Map With Markers</h3>
                 </div>
             </div>
         </div>

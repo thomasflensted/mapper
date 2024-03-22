@@ -39,7 +39,7 @@ export const LongInput = ({ heading, value, setter, maxLength }: LongInputProps)
             <label className="text-xs text-gray-600">{heading}</label>
             <textarea
                 value={value}
-                rows={2}
+                rows={3}
                 maxLength={maxLength}
                 onChange={(e) => setter(e.target.value)}
                 className="mb-2 resize-none text-input" />

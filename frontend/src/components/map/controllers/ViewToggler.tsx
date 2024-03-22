@@ -1,6 +1,6 @@
 import { motion } from "framer-motion"
-import { MapStateActionType } from "../../types/mapStateActions";
-import { useMapStateContext } from "../../hooks/map-state/useMapStateContext";
+import { MapStateActionType } from "../../../types/mapStateActions";
+import { useMapStateContext } from "../../../hooks/map-state/useMapStateContext";
 
 const ViewToggler = () => {
 
@@ -28,7 +28,7 @@ const ViewToggler = () => {
                 </motion.div>
             </div>
             <h4 className={`text-xs text-blue-600 ${view === 'marker' ? 'font-medium' : 'font-light'}`}>Marker</h4>
-        </motion.div >
+        </motion.div>
     )
 }
 

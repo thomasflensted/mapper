@@ -1,19 +1,22 @@
 import { DoubleArrowRightIcon } from '@radix-ui/react-icons'
 import { motion } from "framer-motion"
 import { useState } from 'react';
-import { PlaceType } from '../../types/placeTypes';
-import { Filters } from '../../types/miscTypes';
+import { PlaceType } from '../../../types/placeTypes';
+import { Filters } from '../../../types/miscTypes';
+import { useMapStateContext } from '../../../hooks/map-state/useMapStateContext';
+import { MapStateActionType } from '../../../types/mapStateActions';
 
 type ExpanderProps = {
-    setFilter: React.Dispatch<React.SetStateAction<PlaceType[]>>
+    setFilter: React.Dispatch<React.SetStateAction<PlaceType[]>>,
 }
 
 const FiltersExpander = ({ setFilter }: ExpanderProps) => {
 
+    const { currentPlace, mapStateDispatch } = useMapStateContext();
     const [isExpanded, setIsExpanded] = useState(false);
     const animation = {
-        open: { width: 763, height: 40, transition: { duration: 0.6, ease: [.77, 0, .18, 1] } },
-        closed: { width: 40, height: 40, transition: { duration: 0.6, ease: [.77, 0, .18, 1] } }
+        open: { width: 125, height: 340, borderRadius: 10, transition: { duration: 0.6, ease: [.77, 0, .18, 1] } },
+        closed: { width: 40, height: 40, borderRadius: 20, transition: { duration: 0.6, ease: [.77, 0, .18, 1] } }
     }
 
     const [filterElements, setFilterElements] = useState<Filters>([
@@ -24,11 +27,16 @@ const FiltersExpander = ({ setFilter }: ExpanderProps) => {
         { name: "Sights", value: 'sight', checked: false },
         { name: "Museums", value: 'museum', checked: false },
         { name: "Memories", value: 'memory', checked: false },
+        { name: "Other", value: 'other', checked: false },
     ])
 
     const updateFilter = (updatedFilters: Filters) => {
         const selectedFilters: PlaceType[] = updatedFilters.filter(filterElement => filterElement.checked).map(filterElement => filterElement.value);
         setFilter(selectedFilters);
+        if (currentPlace && !selectedFilters.includes(currentPlace.type)) {
+            mapStateDispatch({ type: MapStateActionType.SET_PLACE, payload: null });
+            mapStateDispatch({ type: MapStateActionType.SET_POPUP, payload: false });
+        }
     }
 
     const handleChange = (name: string) => {
@@ -48,8 +56,9 @@ const FiltersExpander = ({ setFilter }: ExpanderProps) => {
         <motion.div variants={animation} animate={isExpanded ? "open" : "closed"} initial={false}
             onMouseEnter={() => setIsExpanded(true)}
             onMouseLeave={() => setIsExpanded(false)}
-            className="absolute border flex items-center gap-5 p-[12px] overflow-hidden bg-white rounded-full shadow-lg top-2 left-2 justfify-left">
-            <DoubleArrowRightIcon className="flex-shrink-0 w-3" />
+            className="absolute border flex flex-col gap-4 p-[12px] overflow-hidden bg-white shadow-lg top-2 left-2 justfify-left">
+            <DoubleArrowRightIcon
+                className="flex-shrink-0 w-3 rotate-90" />
             {filterElements.map(filterElement =>
                 <div key={filterElement.name} className='flex'>
                     <input
@@ -67,7 +76,7 @@ const FiltersExpander = ({ setFilter }: ExpanderProps) => {
             )}
             <button
                 onClick={handleDeselect}
-                className='px-3 py-1 text-xs border rounded-full whitespace-nowrap hover:bg-gray-50'>
+                className='px-3 py-1 text-xs border rounded whitespace-nowrap hover:bg-gray-50'>
                 Deselect All
             </button>
         </motion.div>

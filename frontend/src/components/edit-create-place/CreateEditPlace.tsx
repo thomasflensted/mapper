@@ -2,7 +2,7 @@ import { NewPlace, Place, PlaceType } from "../../types/placeTypes";
 import { forwardRef, useEffect, useState } from "react";
 import { usePlaces } from "../../hooks/place-hooks/usePlaces";
 import { useAuthContext } from "../../hooks/user-hooks/useAuthContext";
-import { LabelAndInput } from "../global-misc-general/FormComponents"
+import { LabelAndInput, LongInput } from "../global-misc-general/FormComponents"
 import { ErrorMssg } from "../global-misc-general/ErrorAndSuccess";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import TypeDropDown from "./TypeDropDown";
@@ -10,23 +10,25 @@ import HaveBeenToggle from "./HaveBeenToggle";
 import * as Dialog from '@radix-ui/react-dialog';
 import { usePlaceContext } from "../../hooks/place-hooks/usePlaceContext";
 import { PlaceActionType } from "../../types/placeActions";
+import { useMapStateContext } from "../../hooks/map-state/useMapStateContext";
+import { MapStateActionType } from "../../types/mapStateActions";
 
 type DialogProps = {
     map_id: string,
     setOpen: React.Dispatch<React.SetStateAction<boolean>>,
     place?: Place,
     coordinates: [number, number],
-    setShowPopUp?: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 const CreateEditPlace = forwardRef(function (props: DialogProps, ref: any) {
 
-    const { map_id, setOpen, place, coordinates, setShowPopUp } = props;
+    const { mapStateDispatch } = useMapStateContext()
+    const { map_id, setOpen, place, coordinates } = props;
 
     // hooks
     const { user } = useAuthContext();
+    const { places, placeDispatch } = usePlaceContext();
     const { error, createPlace, updatePlace, deletePlace } = usePlaces();
-    const { placeDispatch } = usePlaceContext();
 
     // state
     const [name, setName] = useState<string>(place ? place.name : '');
@@ -37,6 +39,8 @@ const CreateEditPlace = forwardRef(function (props: DialogProps, ref: any) {
 
     const handleDelete = async () => {
         if (place) await deletePlace(user, place?._id)
+        mapStateDispatch({ type: MapStateActionType.SET_POPUP, payload: false });
+        setOpen(false);
     }
 
     const handleSubmit = async (e: any) => {
@@ -45,10 +49,12 @@ const CreateEditPlace = forwardRef(function (props: DialogProps, ref: any) {
         if (place) {
             result = await updatePlace(user, place._id, { name, description, type })
             if (result) placeDispatch({ type: PlaceActionType.UPDATE_PLACE, payload: { id: place._id, updatedProps: { name, description, type } } });
+            const thisPlace = places.find(curPlace => curPlace._id === place._id);
+            if (thisPlace) mapStateDispatch({ type: MapStateActionType.SET_PLACE, payload: { ...thisPlace, name, description, type } })
         } else {
             const newPlace: NewPlace = { name, description, coordinates, have_been: false, type, images: [], map_id }
             result = await createPlace(user, newPlace);
-            if (result && setShowPopUp) setShowPopUp(false);
+            if (result) mapStateDispatch({ type: MapStateActionType.SET_POPUP, payload: false });
         }
         if (result) setOpen(false);
     }
@@ -65,7 +71,7 @@ const CreateEditPlace = forwardRef(function (props: DialogProps, ref: any) {
     }, [name, description, type])
 
     const handleClose = () => {
-        if (setShowPopUp) setShowPopUp(false);
+        mapStateDispatch({ type: MapStateActionType.SET_POPUP, payload: false });
     }
 
     return (
@@ -74,7 +80,7 @@ const CreateEditPlace = forwardRef(function (props: DialogProps, ref: any) {
                 <Dialog.Title className="mb-3 text-lg font-bold text-blue-600">{place ? 'Edit Place' : 'Create New Place'}</Dialog.Title>
                 <form className="flex flex-col gap-4" id="newplaceform" onSubmit={(e) => handleSubmit(e)}>
                     <LabelAndInput heading='Name' value={name} setter={setName} optional={false} />
-                    <LabelAndInput heading='Description' value={description} setter={setDescription} optional={true} />
+                    <LongInput heading="Description" optional={true} setter={setDescription} maxLength={150} value={description} />
                     <TypeDropDown setType={setType} type={type} />
                     <HaveBeenToggle setHaveBeen={setHaveBeen} haveBeen={haveBeen} />
                     <div className="flex gap-2">
