@@ -9,9 +9,12 @@ import { useEffect } from "react";
 
 // components
 import { MapGrid } from "./MapGrid";
+import { MapStateActionType } from "../../types/mapStateActions";
+import { useMapStateContext } from "../../hooks/map-state/useMapStateContext";
 
 const UserHome = () => {
 
+    const { mapStateDispatch } = useMapStateContext()
     const { user } = useAuthContext();
     const { maps } = useMapContext();
     const { error, isLoading, getMaps } = useMaps();
@@ -19,6 +22,10 @@ const UserHome = () => {
     const containerAnimation = { before: {}, after: { transition: { duration: .2, staggerChildren: .1 } } }
 
     useEffect(() => {
+        mapStateDispatch({ type: MapStateActionType.SET_ADJUSTING, payload: false });
+        mapStateDispatch({ type: MapStateActionType.SET_PLACE, payload: null });
+        mapStateDispatch({ type: MapStateActionType.SET_POPUP, payload: false });
+        mapStateDispatch({ type: MapStateActionType.SET_VIEW, payload: 'marker' });
         const fetchMaps = async () => await getMaps(user);
         fetchMaps();
     }, [])
