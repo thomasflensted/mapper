@@ -30,10 +30,20 @@ The project is deployed on [render.com](www.render.com).
 
 *TypeScript*: This was my first project using TypeScript. In the beginning it took some extra work and I couldn't really see the benefits - probably mostly because I was tired of my percieved inefficiency. However, that changed quickly as I realized how efficent it was: Way fewer bugs because TypeScript warned me immediately and way less ambiguity in my code.
 
-*Limitations of plain React*: While building the project, I realized I should've used a framework like Next.js for a project like this. React is very good for single-page applications, but for multi-page applications like this, Next.js would have been the better option. Its server rendering of components would make the user experience smoother (especially the Framer Motion animations) and it converting some of the app's state to URL params (which is encouraged in Next.js) would also make the experience smoother for the user. With the current setup, I had to setup some redirect/reqrite rules 
+*Limitations of plain React*: While building the project, I realized I should've used a framework like Next.js for a project like this. React is very good for single-page applications, but for multi-page applications like this, Next.js would have been the better option. Its server rendering of components would make the user experience smoother (especially the Framer Motion animations) and it converting some of the app's state to URL params (which is encouraged in Next.js) would also make the experience smoother for the user. With the current setup, I had to setup some redirect/rewrite rules in order to not get a 404 on reloads. With Next.js this would not have been necessary.
 
-This made the process of styling so much faster than traditional CSS, and I am certain I will use Tailwind for all future projects as well
-Radix a little to cluttered sometimes
-In creating Mapper, I learned a lot about rendering React components, working with other React libraries, animations, the difference between single- and multi-page applications, the importance of error handling, the handling and management of state across multiple pages and finally
+*TailwindCSS*: Tailwind makes styling so much faster and more efficient. It enabled me style components immediately and see the result immediately. No coming up with classnames and remembering classnames I created days earlier.
+
+*Using components libraries*: I used Radix for some components in this project. It is fast, especially combined with Tailwind, but it also introduces some complexity that I am not sure was worth it. Maybe I'll just create my own modals and dropdowns next time.
+
 
 ### To do / upcoming features
+
+- Convert the project to a Next.js project
+- Implement image uploads with Amazon S3 and multer.
+- Implement *have been/want to go* on place. Data property and design already built.
+- Auto-add place to another map when place goes from *want to go* to *have been*.
+- Share maps and places bwtween users
+- Collborate on maps
+- Auto-zoom to markers on load
+- Duplicate map and all associated places
