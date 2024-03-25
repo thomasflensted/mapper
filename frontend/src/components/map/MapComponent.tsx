@@ -8,7 +8,6 @@ import mapboxgl from 'mapbox-gl';
 const TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const STYLE = import.meta.env.VITE_MAP_STYLE;
 
-
 type MapComponentProps = {
     children: ReactNode,
     handleMapClick: (e: mapboxgl.MapLayerMouseEvent) => void,
