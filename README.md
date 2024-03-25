@@ -22,7 +22,7 @@ Before even touching any frontend development I created all models, routes and c
 
 **Frontend**:
 
-The frontend is entirely built in **React** with **TypeScript** using functional components. Maps, markers and popups I created with [**MapBox**](https://www.mapbox.com/) and [**React Map GL**](https://visgl.github.io/react-map-gl/) which is a React wrapper around the MapBox API. Not all native MapBox map methods are accessible through React Map GL however, but by initializing a ref and attaching it to the map, I got access to all functionality included in MapBox' own [API](https://docs.mapbox.com/mapbox-gl-js/guides).
+The frontend is entirely built in **React** with **TypeScript** using functional components. Maps, markers and popups I created with [**MapBox**](https://www.mapbox.com/) and [**React Map GL**](https://visgl.github.io/react-map-gl/) which is a React wrapper around the MapBox API. Not all native MapBox map methods are accessible through React Map GL however, but by initializing a ref and attaching it to the map, I got access to all functionality included in MapBox' own [API](https://docs.mapbox.com/mapbox-gl-js/api/).
 
 I handled all styling of the app with **TailwindCSS**. For some components - dropdowns and dialogs mainly - I used [**Radix UI**](https://www.radix-ui.com/)'s unstyled primitives. For animation I either created them just with CSS or used [**Framer Motion**](https://www.framer.com/motion/). All icons are from [React Icons](https://react-icons.github.io/react-icons/).
 
