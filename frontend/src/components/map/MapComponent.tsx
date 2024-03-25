@@ -18,14 +18,20 @@ const MapComponent = ({ children, handleMapClick }: MapComponentProps) => {
 
     // ref - the ref exposes all native MapBox map methods
     const mapRef = useRef<any>(null);
-    const { currentPlace } = useMapStateContext();
+    const { currentPlace, view } = useMapStateContext();
 
     // fly to place if outside of visible map
     useEffect(() => {
         if (!mapRef || !mapRef.current) return;
+        console.log(mapRef.current.getZoom());
         if (currentPlace) {
-            console.log(mapRef.current.getBounds());
-            mapRef.current.flyTo({ center: [currentPlace?.coordinates[0], currentPlace?.coordinates[1]], zoom: 13 })
+            const curZoom = mapRef.current.getZoom();
+            if (view === 'marker' && curZoom < 12) {
+                mapRef.current.flyTo({ center: [currentPlace?.coordinates[0], currentPlace?.coordinates[1]], zoom: 12 })
+            } else if (view === 'list') {
+                if (curZoom > 13) mapRef.current.flyTo({ center: [currentPlace?.coordinates[0], currentPlace?.coordinates[1]], zoom: curZoom })
+                else mapRef.current.flyTo({ center: [currentPlace?.coordinates[0], currentPlace?.coordinates[1]], zoom: 13 });
+            }
         }
     }, [currentPlace])
 
