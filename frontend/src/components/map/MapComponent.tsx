@@ -23,9 +23,9 @@ const MapComponent = ({ children, handleMapClick }: MapComponentProps) => {
     // fly to place if outside of visible map
     useEffect(() => {
         if (!mapRef || !mapRef.current) return;
-        if (currentPlace && !mapRef.current?.getBounds().contains(currentPlace.coordinates)) {
+        if (currentPlace) {
             console.log(mapRef.current.getBounds());
-            mapRef.current.flyTo({ center: [currentPlace?.coordinates[0], currentPlace?.coordinates[1]] })
+            mapRef.current.flyTo({ center: [currentPlace?.coordinates[0], currentPlace?.coordinates[1]], zoom: 13 })
         }
     }, [currentPlace])
 

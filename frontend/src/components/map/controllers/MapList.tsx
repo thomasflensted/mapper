@@ -36,7 +36,7 @@ const MapListContainer = ({ filteredPlaces }: { filteredPlaces: Places }) => {
     return (
         <motion.div
             initial={false} variants={listAnimation} animate={view === 'list' ? "visible" : "hidden"} transition={transition} id='container'
-            className="absolute right-0 z-10 h-full gap-4 p-4 overflow-y-scroll bg-white border border-black shadow-lg w-[340px]">
+            className="absolute right-0 z-10 h-full gap-4 p-4 overflow-y-scroll bg-white shadow-lg w-[340px]">
             <Dialog.Root open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
                 {filteredPlaces.map((place: Place) =>
                     <div
