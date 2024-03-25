@@ -1,4 +1,6 @@
-## Mapper (working title)
+## Mapper
+
+[Try it out right here](https://mapper-ki3d.onrender.com/).
 
 ### What is it?
 
@@ -31,6 +33,8 @@ The project is deployed on [render.com](www.render.com).
 *TypeScript*: This was my first project using TypeScript. In the beginning it took some extra work and I couldn't really see the benefits - probably mostly because I was tired of my percieved inefficiency. However, that changed quickly as I realized how efficent it was: Way fewer bugs because TypeScript warned me immediately and way less ambiguity in my code.
 
 *Limitations of plain React*: While building the project, I realized I should've used a framework like Next.js for a project like this. React is very good for single-page applications, but for multi-page applications like this, Next.js would have been the better option. Its server rendering of components would make the user experience smoother (especially the Framer Motion animations) and it converting some of the app's state to URL params (which is encouraged in Next.js) would also make the experience smoother for the user. With the current setup, I had to setup some redirect/rewrite rules in order to not get a 404 on reloads. With Next.js this would not have been necessary.
+
+*State management*: As the amount of state grew and I implemented more and more contexts, reducers and hooks, I realized that it probably would've been better to gather a lot of that in the same place using [Redux](https://redux.js.org/) or [Zustand](https://zustand-demo.pmnd.rs/).
 
 *TailwindCSS*: Tailwind makes styling so much faster and more efficient. It enabled me style components immediately and see the result immediately. No coming up with classnames and remembering classnames I created days earlier.
 
