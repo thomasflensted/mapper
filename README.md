@@ -4,7 +4,7 @@
 
 ### What is it?
 
-Mapper is a web app that allows anybody with an account to create their own maps on which they can create and save places. You can create as many maps as you like and as many places as you like. Each map has a name and a description and places have a name, description and type. When you open a map, you can view it in *marker* mode or *list* mode, In marker mode, when you click one of your places on a map, a popup with info about the place is shown. In list mode, all your places are listed in a container inside the map. Try it our right [here](https://mapper-ki3d.onrender.com/). Apart from all map functions, you can edit your email address, password and names.
+Mapper is a web app that allows anybody with an account to create their own maps on which they can create and save places. You can create as many maps as you like and as many places as you like. Each map has a name and a description and places have a name, description and type. When you open a map, you can view it in *marker* mode or *list* mode, In marker mode, when you click one of your places on a map, a popup with info about the place is shown. In list mode, all your places are listed in a container inside the map. Try it out right [here](https://mapper-ki3d.onrender.com/). Apart from all map functions, you can edit your email address, password and names.
 
 ### Why did I create it?
 
@@ -48,6 +48,6 @@ The project is deployed on [render.com](www.render.com).
 - Implement *have been/want to go* on place. Data property and design already built.
 - Auto-add place to another map when place goes from *want to go* to *have been*.
 - Share maps and places bwtween users
-- Collborate on maps
+- Collaborate on maps
 - Auto-zoom to markers on load
 - Duplicate map and all associated places
